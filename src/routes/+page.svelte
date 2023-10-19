@@ -9,25 +9,39 @@
 </p>
 
 <div>
-	<h1>เกมไรวะเนี่ยยยยยยยยยยยย</h1>
-	<a href="./game">&#127875;Start&#128375;</a>
-	<a href="./help">How to play&#128302;</a>
+	<h1>Candy Rotater</h1>
+	<a href="./game">🎃 Start 🦇</a>
+	<a href="./help">How to play🧟‍♂️</a>
 </div>
 
 <style>
+	@font-face {
+		font-family: myFirstFont;
+		src: url('$lib/fonts/MN KRASIP.ttf');
+	}
+
+	h1 {
+		font-family: myFirstFont;
+		font-size: 150px;
+		margin-top: 0%;
+		margin-bottom: 0%;
+		color: var(--base-orange);
+		text-shadow: 0px 0px 10px var(--base-black);
+	}
+
 	div {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		gap: 24px;
-		padding-top: 20vh;
+		/* padding-top: 20vh; */
 	}
 
 	a {
 		text-decoration: none;
 		color: #fff;
-		background: #2e2c29;
+		background: var(--base-black);
 		font-size: 40px;
 		font-weight: 600;
 		font-family: 'Roboto', sans-serif;
@@ -39,10 +53,12 @@
 	}
 
 	a:hover {
-		background-color: #e6862e;
+		background-color: var(--base-orange);
 	}
 
 	img {
+		margin-top: 0%;
+		margin-bottom: 0%;
 		margin-right: 10px;
 	}
 </style>
