@@ -21,20 +21,20 @@
 	}
 
 	/**
-		* example with delay = 5, period = 8, begin = 0.5, increment = 0.2
-		* ```
-		* score          5    10   15   20   25
-											<--0----'----'----'----'----'>
-		* delay  -------]
-		* period         [------][------][---->
-		* return 0      ]|[0.5  ][0.7   ][0.9 >
-		*                1
-		* ```
-		* @param score
-		* @param delay
-		* @param period
-		* @param increment
-		*/
+	 * example with delay = 5, period = 8, begin = 0.5, increment = 0.2
+	 * ```
+	 * score          5    10   15   20   25
+	 *        <--0----'----'----'----'----'>
+	 * delay  -------]
+	 * period         [------][------][---->
+	 * return 0      ]|[0.5  ][0.7   ][0.9 >
+	 *                1
+	 * ```
+	 * @param score
+	 * @param delay
+	 * @param period
+	 * @param increment
+	 */
 	function getProbabilty(
 		score: number,
 		delay: number,
