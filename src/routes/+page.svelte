@@ -3,6 +3,9 @@
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
 
+	const gameMode = ['Normal', 'Memory'];
+	let selected = gameMode[0];
+
 	let showSpeakerImage = true;
 	let imageSource = speakerImageOn;
 	function toggleImage() {
@@ -11,16 +14,26 @@
 	}
 </script>
 
-<p>
-	<img src={settingImage} alt="settings" width="50px" height="50px" />
-	<button on:click={toggleImage} class="clickable-image">
-		<img src={imageSource} alt="settings" width="50px" height="50px" />
-	</button>
-</p>
+<div class="containner">
+	<div class="buttom-icon">
+		<img src={settingImage} alt="settings" width="50px" height="50px" />
+		<button on:click={toggleImage} class="clickable-image">
+			<img src={imageSource} alt="settings" width="50px" height="50px" />
+		</button>
+	</div>
 
-<div>
-	<h1>Candy Rotater</h1>
+	<h1>Candy Rotator</h1>
 	<a href="./game">🎃 Start 🦇</a>
+	<div class="button-group">
+		{#each gameMode as mode}
+			<button
+				aria-current={selected === mode}
+				aria-label={mode}
+				on:click={() => (selected = mode)}
+				class="button-mode">{mode}</button
+			>
+		{/each}
+	</div>
 	<a href="./help">How to play🧟‍♂️</a>
 </div>
 
@@ -39,12 +52,28 @@
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
 
-	div {
+	.containner {
+		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 24px;
+		gap: 16px;
+		padding-top: 0%;
+	}
+
+	.buttom-icon {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+		gap: 10px;
+	}
+
+	.button-group {
+		flex-direction: row;
+		gap: 16px;
 	}
 
 	a {
@@ -56,8 +85,8 @@
 		font-family: 'Roboto', sans-serif;
 		padding-left: 24px;
 		padding-right: 24px;
-		padding-top: 18px;
-		padding-bottom: 12px;
+		padding-top: 16px;
+		padding-bottom: 16px;
 		border-radius: 980px;
 	}
 
@@ -65,10 +94,29 @@
 		background-color: var(--base-orange);
 	}
 
-	img {
-		margin-top: 0%;
-		margin-bottom: 0%;
-		margin-right: 10px;
+	.button-mode {
+		border-radius: 980px;
+		font-family: 'Roboto', sans-serif;
+		font-size: 40px;
+		font-weight: 600;
+		background: var(--base-black);
+		color: #fff;
+		transform: translate(-2px, -2px);
+		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+		transition: all 0.1s;
+		padding-left: 24px;
+		padding-right: 24px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+	}
+
+	button[aria-current='true'] {
+		transform: none;
+		filter: none;
+
+		/* box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.2); */
+		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
+		border: var(--base-orange) 2px solid;
 	}
 
 	.clickable-image {
