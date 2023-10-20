@@ -7,6 +7,7 @@
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
+	const harderSpinThreshold = 30;
 
 	let playerGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
 	let targetGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
@@ -17,6 +18,42 @@
 	let spinRand = seededSfc32(gameSeed);
 	for (let i = 0; i < 100; i++) {
 		spinRand();
+	}
+
+	/**
+		* example with delay = 5, period = 8, begin = 0.5, increment = 0.2
+		* ```
+		* score          5    10   15   20   25
+											<--0----'----'----'----'----'>
+		* delay  -------]
+		* period         [------][------][---->
+		* return 0      ]|[0.5  ][0.7   ][0.9 >
+		*                1
+		* ```
+		* @param score
+		* @param delay
+		* @param period
+		* @param increment
+		*/
+	function getProbabilty(
+		score: number,
+		delay: number,
+		period: number,
+		begin: number,
+		increment: number
+	) {
+		if (score === delay) return 1;
+		if (score < delay) return 0;
+		return Math.floor((score - delay + period) * (1 / period)) * increment + begin;
+	}
+
+	/**
+	 * @param frac 0-1
+	 * @param min inclusive
+	 * @param max inclusive
+	 */
+	function getInt(frac: number, min: number, max: number) {
+		return Math.floor(frac * (max - min + 1)) + min;
 	}
 
 	function startNewGrid() {
@@ -33,13 +70,16 @@
 		const tempB = spinRand();
 		const tempC = spinRand();
 		const tempD = spinRand();
-		if (tempA < 0.5) {
-			playerRotation += Math.floor(tempB * 3) - 1;
+		if (tempA < getProbabilty(gridsCount, 5, 5, 0.5, 0.056)) {
+			const tempE = harderSpinThreshold <= gridsCount ? getInt(tempB, -2, 4) : getInt(tempB, 0, 2);
+			playerRotation += tempE <= 0 ? tempE - 1 : tempE;
 		}
-		if (tempC < 0.25) {
-			targetRotation += Math.floor(tempD * 3) - 1;
+		if (tempC < getProbabilty(gridsCount, 15, 3, 0.4, 0.05)) {
+			const tempE = harderSpinThreshold <= gridsCount ? getInt(tempD, -2, 4) : getInt(tempD, 0, 2);
+			targetRotation += tempE <= 0 ? tempE - 1 : tempE;
 		}
 	}
+
 	function checkMatching() {
 		for (let y = 0; y < size; y++) {
 			for (let x = 0; x < size; x++) {
@@ -48,6 +88,15 @@
 		}
 		return true;
 	}
+
+	function devcheat() {
+		for (let y = 0; y < size; y++) {
+			for (let x = 0; x < size; x++) {
+				playerGrid[y][x] = targetGrid[y][x];
+			}
+		}
+	}
+
 	startNewGrid();
 	spinIt();
 	$: {
@@ -95,6 +144,8 @@
 </p>
 
 <p>grid no. {gridsCount}</p>
+
+<button on:click={devcheat}>dev cheat</button>
 
 <style>
 	div.gamecontainer {
