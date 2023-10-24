@@ -2,6 +2,7 @@
 	import GameSquare from './GameSquare.svelte';
 	import { seededSfc32 } from '$lib/rng';
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 
 	export let data;
 	const gameSeed = data.gameSeed;
@@ -103,20 +104,60 @@
 		playerGrid;
 		if (checkMatching()) {
 			gridsCount++;
+			increaseTime();
 			startNewGrid();
 			spinIt();
 		}
 	}
+
+	let countdownNum = 0;
+	let startTime: number = 0;
+	let nowTime: number = 0;
+	let deathTime: number = 0;
+	$: remainTime = deathTime - nowTime;
+	$: gameOver = remainTime < 0;
+
+	function increaseTime() {
+		deathTime += 2000;
+	}
+
+	function startTheTime() {
+		startTime = performance.now();
+		nowTime = startTime;
+		deathTime = startTime + 10000;
+		requestAnimationFrame(updateNowTime);
+	}
+	function updateNowTime() {
+		nowTime = performance.now();
+		if (!gameOver) requestAnimationFrame(updateNowTime);
+	}
+
+	onMount(() => {
+		countdownNum = 3;
+		const countdownInterval = setInterval(() => {
+			countdownNum--;
+			if (countdownNum <= 0) {
+				startTheTime();
+				clearInterval(countdownInterval);
+			}
+		}, 1000);
+	});
 </script>
 
 <h1>epic gamo</h1>
+<h2>{countdownNum}</h2>
+<h2>{Math.floor(remainTime)}</h2>
 <div class="gamecontainer">
 	<div>
 		<div class="spinny" style:rotate={`${0.25 * playerRotation}turn`}>
 			{#each playerGrid as row, y}
 				<div>
 					{#each row as state, x}
-						<GameSquare bind:state corner={x === 0 && y === 0} />
+						<GameSquare
+							bind:state
+							corner={x === 0 && y === 0}
+							noninteractive={countdownNum != 0 || gameOver}
+						/>
 					{/each}
 				</div>
 			{/each}
