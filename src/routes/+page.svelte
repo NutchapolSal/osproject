@@ -15,7 +15,7 @@
 </script>
 
 <div class="containner">
-	<div class="buttom-icon">
+	<div class="button-icon">
 		<img src={settingImage} alt="settings" width="50px" height="50px" />
 		<button on:click={toggleImage} class="clickable-image">
 			<img src={imageSource} alt="settings" width="50px" height="50px" />
@@ -43,15 +43,6 @@
 		src: url('$lib/fonts/MN KRASIP.ttf');
 	}
 
-	h1 {
-		font-family: myFirstFont;
-		font-size: 150px;
-		margin-top: 0%;
-		margin-bottom: 0%;
-		color: var(--base-orange);
-		text-shadow: 0px 0px 10px var(--base-black);
-	}
-
 	.containner {
 		width: 100%;
 		display: flex;
@@ -62,7 +53,16 @@
 		padding-top: 0%;
 	}
 
-	.buttom-icon {
+	h1 {
+		font-family: myFirstFont;
+		font-size: 150px;
+		margin-top: 0%;
+		margin-bottom: 0%;
+		color: var(--base-orange);
+		text-shadow: 0px 0px 10px var(--base-black);
+	}
+
+	.button-icon {
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
