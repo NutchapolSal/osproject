@@ -1,15 +1,39 @@
+<script lang="ts" context="module">
+	let stoppaint = false;
+	let paintstate = false;
+</script>
+
 <script lang="ts">
 	export let state: boolean;
 	export let noninteractive: boolean = false;
 	export let small: boolean = false;
 	export let corner: boolean = false;
+	export let stopMouseHold: number = 0;
+	$: {
+		stopMouseHold;
+		stoppaint = true;
+	}
+	let buttonThis: HTMLButtonElement;
 </script>
 
 {#if !noninteractive}
 	<button
+		bind:this={buttonThis}
 		class="gamesquare"
-		on:click={() => {
-			if (!noninteractive) state = !state;
+		on:pointermove={(e) => {
+			if (e.buttons === 1) {
+				if (!stoppaint) {
+					state = paintstate;
+				}
+			} else {
+				stoppaint = false;
+			}
+		}}
+		on:pointerdown={(e) => {
+			buttonThis.releasePointerCapture(e.pointerId);
+			paintstate = !state;
+			state = paintstate;
+			stoppaint = false;
 		}}
 		class:stateOn={state}
 		class:corner
@@ -24,6 +48,7 @@
 		width: 20vmin;
 		height: 20vmin;
 		border: #000000 1px solid;
+		touch-action: none;
 	}
 	div.gamesquare {
 		display: inline-block;
