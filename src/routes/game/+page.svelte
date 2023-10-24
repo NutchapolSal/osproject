@@ -3,6 +3,7 @@
 	import { seededSfc32 } from '$lib/rng';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import GameGrid from './GameGrid.svelte';
 
 	export let data;
 	const gameSeed = data.gameSeed;
@@ -151,34 +152,18 @@
 <h2>{Math.floor(remainTime)}</h2>
 <div class="gamecontainer">
 	<div>
-		<div class="spinny" style:rotate={`${0.25 * playerRotation}turn`}>
-			{#each playerGrid as row, y}
-				<div>
-					{#each row as state, x}
-						<GameSquare
-							bind:state
-							corner={x === 0 && y === 0}
-							noninteractive={countdownNum != 0 || gameOver}
-							{stopPointerHold}
-						/>
-					{/each}
-				</div>
-			{/each}
-		</div>
+		<GameGrid
+			bind:grid={playerGrid}
+			rotation={playerRotation}
+			noninteractive={countdownNum != 0 || gameOver}
+			{stopPointerHold}
+		/>
 	</div>
 
 	<div>
 		<div>
 			<p>target</p>
-			<div class="spinny" style:rotate={`${0.25 * targetRotation}turn`}>
-				{#each targetGrid as row, y}
-					<div class="rowcontainer">
-						{#each row as state, x}
-							<GameSquare {state} corner={x === 0 && y === 0} noninteractive small />
-						{/each}
-					</div>
-				{/each}
-			</div>
+			<GameGrid bind:grid={targetGrid} rotation={targetRotation} noninteractive small />
 		</div>
 	</div>
 </div>
@@ -196,12 +181,5 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
-	}
-	div.spinny {
-		display: inline-block;
-		transition: rotate 0.5s cubic-bezier(0.33, 1, 0.68, 1);
-	}
-	div.rowcontainer {
-		margin: 0;
 	}
 </style>
