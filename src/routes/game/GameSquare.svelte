@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-	let stoppaint = false;
-	let paintstate = false;
+	let stophold = false;
+	let holdingpaint = false;
 </script>
 
 <script lang="ts">
@@ -8,10 +8,10 @@
 	export let noninteractive: boolean = false;
 	export let small: boolean = false;
 	export let corner: boolean = false;
-	export let stopMouseHold: number = 0;
+	export let stopPointerHold: number = 0;
 	$: {
-		stopMouseHold;
-		stoppaint = true;
+		stopPointerHold;
+		stophold = true;
 	}
 	let buttonThis: HTMLButtonElement;
 </script>
@@ -22,18 +22,18 @@
 		class="gamesquare"
 		on:pointermove={(e) => {
 			if (e.buttons === 1) {
-				if (!stoppaint) {
-					state = paintstate;
+				if (!stophold) {
+					state = holdingpaint;
 				}
 			} else {
-				stoppaint = false;
+				stophold = false;
 			}
 		}}
 		on:pointerdown={(e) => {
 			buttonThis.releasePointerCapture(e.pointerId);
-			paintstate = !state;
-			state = paintstate;
-			stoppaint = false;
+			holdingpaint = !state;
+			state = holdingpaint;
+			stophold = false;
 		}}
 		class:stateOn={state}
 		class:corner

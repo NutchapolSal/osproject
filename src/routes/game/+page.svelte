@@ -15,7 +15,7 @@
 	let playerRotation = 0;
 	let targetRotation = 0;
 	let gridsCount = 1;
-	let stopMouseHold = 0;
+	let stopPointerHold = 0;
 	let gridRand = seededSfc32(gameSeed);
 	let spinRand = seededSfc32(gameSeed);
 	for (let i = 0; i < 100; i++) {
@@ -107,7 +107,7 @@
 			gridsCount++;
 			increaseTime();
 			startNewGrid();
-			stopMouseHold++;
+			stopPointerHold++;
 			spinIt();
 		}
 	}
@@ -159,7 +159,7 @@
 							bind:state
 							corner={x === 0 && y === 0}
 							noninteractive={countdownNum != 0 || gameOver}
-							{stopMouseHold}
+							{stopPointerHold}
 						/>
 					{/each}
 				</div>
