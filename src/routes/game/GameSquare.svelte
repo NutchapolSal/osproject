@@ -48,7 +48,11 @@
 		width: 20vmin;
 		height: 20vmin;
 		border: #000000 1px solid;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
 		touch-action: none;
+		border-radius: 25px;
 	}
 	div.gamesquare {
 		display: inline-block;

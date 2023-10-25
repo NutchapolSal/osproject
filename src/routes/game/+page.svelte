@@ -241,21 +241,23 @@
 	});
 </script>
 
-<h1>epic gamo</h1>
+<!-- <h1>epic gamo</h1> -->
 <h2>{countdownNum}</h2>
 <h2>{Math.floor(remainTime)}</h2>
 <div class="gamecontainer">
-	<div>
-		<GameGrid
-			bind:grid={playerGrid}
-			rotation={playerRotation}
-			noninteractive={countdownNum != 0 || gameOver}
-			{stopPointerHold}
-			--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
-		/>
+	<div class="game-content">
+		<div>
+			<GameGrid
+				bind:grid={playerGrid}
+				rotation={playerRotation}
+				noninteractive={countdownNum != 0 || gameOver}
+				{stopPointerHold}
+				--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
+			/>
+		</div>
 	</div>
 
-	<div>
+	<div class="game-target">
 		<div>
 			<p>target</p>
 			<GameGrid
@@ -269,22 +271,46 @@
 	</div>
 </div>
 
-<button on:click={devcheat}>dev cheat</button>
-
-<p>
-	gameseed: <code>{gameSeed}</code>
-	<br />
-	<code>{currentSpinSetupI}</code>
-	<br />
-	<code>{JSON.stringify(diffSetups[currentSpinSetupI])}</code>
-</p>
-
-<p>grid no. {gridsCount}</p>
-
 <style>
 	div.gamecontainer {
-		display: flex;
-		flex-direction: row;
+		display: grid;
+		grid-template-columns: auto auto;
 		justify-content: space-around;
+		gap: 100px;
+	}
+
+	.game-content {
+		width: 105%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--base-orange);
+		border: 10px solid var(--base-black);
+		border-radius: 25px;
+		box-shadow: 0px 0px 10px var(--base-black);
+	}
+
+	.game-target {
+		width: 105%;
+		height: 80%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--base-orange);
+		border: 10px solid var(--base-black);
+		border-radius: 25px;
+		box-shadow: 0px 0px 10px var(--base-black);
+	}
+
+	p {
+		font-family: myFirstFont;
+		font-size: 50px;
+		font-weight: 1000;
+		color: var(--base-black);
+		text-shadow: 0px 0px 10px var(--base-orange);
+		text-align: center;
+		margin-top: 0px;
+		margin-bottom: 20px;
 	}
 </style>
