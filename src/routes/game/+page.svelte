@@ -9,7 +9,119 @@
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
-	const harderSpinThreshold = 30;
+
+	enum SpinRange {
+		NINETIES = 1,
+		ONEEIGHTIES = 2,
+		TWOSEVENTIES = 3,
+		THREESIXITES = 4,
+		CRAZY = 8
+	}
+	interface GridDifficulty {
+		chance: number;
+		range: SpinRange;
+		duration: number;
+	}
+
+	type GridDifficultySetup = {
+		grid: number;
+		recovery: number;
+		player: GridDifficulty | null;
+		target: GridDifficulty | null;
+	}[];
+
+	const diffSetups: GridDifficultySetup = [
+		{ grid: 0, recovery: 1500, player: null, target: null },
+		{
+			grid: 6,
+			recovery: 1500,
+			player: { chance: 1, range: SpinRange.NINETIES, duration: 0.5 },
+			target: null
+		},
+		{ grid: 7, recovery: 1500, player: null, target: null },
+		{
+			grid: 10,
+			recovery: 1500,
+			player: { chance: 0.3, range: SpinRange.NINETIES, duration: 0.5 },
+			target: null
+		},
+		{
+			grid: 16,
+			recovery: 1500,
+			player: { chance: 0.3, range: SpinRange.NINETIES, duration: 0.5 },
+			target: { chance: 1, range: SpinRange.NINETIES, duration: 0.5 }
+		},
+		{
+			grid: 17,
+			recovery: 1500,
+			player: { chance: 0.3, range: SpinRange.NINETIES, duration: 0.5 },
+			target: null
+		},
+		{
+			grid: 20,
+			recovery: 1000,
+			player: { chance: 0.4, range: SpinRange.ONEEIGHTIES, duration: 0.5 },
+			target: { chance: 0.4, range: SpinRange.NINETIES, duration: 0.5 }
+		},
+		{
+			grid: 30,
+			recovery: 1000,
+			player: { chance: 0.4, range: SpinRange.TWOSEVENTIES, duration: 0.5 },
+			target: { chance: 0.4, range: SpinRange.ONEEIGHTIES, duration: 0.5 }
+		},
+		{
+			grid: 40,
+			recovery: 1000,
+			player: { chance: 0.5, range: SpinRange.THREESIXITES, duration: 0.5 },
+			target: { chance: 0.5, range: SpinRange.TWOSEVENTIES, duration: 0.5 }
+		},
+		{
+			grid: 50,
+			recovery: 800,
+			player: { chance: 0.5, range: SpinRange.THREESIXITES, duration: 0.4 },
+			target: { chance: 0.5, range: SpinRange.THREESIXITES, duration: 0.4 }
+		},
+		{
+			grid: 60,
+			recovery: 800,
+			player: { chance: 0.5, range: SpinRange.THREESIXITES, duration: 0.35 },
+			target: { chance: 0.5, range: SpinRange.THREESIXITES, duration: 0.35 }
+		},
+		{
+			grid: 70,
+			recovery: 800,
+			player: { chance: 0.6, range: SpinRange.CRAZY, duration: 0.35 },
+			target: { chance: 0.6, range: SpinRange.CRAZY, duration: 0.35 }
+		},
+		{
+			grid: 80,
+			recovery: 800,
+			player: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.45 },
+			target: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.45 }
+		},
+		{
+			grid: 90,
+			recovery: 800,
+			player: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.6 },
+			target: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.6 }
+		},
+		{
+			grid: 100,
+			recovery: 600,
+			player: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.75 },
+			target: { chance: 0.75, range: SpinRange.CRAZY, duration: 0.75 }
+		},
+		{
+			grid: 101,
+			recovery: 600,
+			player: { chance: 1, range: SpinRange.NINETIES, duration: 5 },
+			target: { chance: 1, range: SpinRange.NINETIES, duration: 5 }
+		}
+	];
+
+	diffSetups.sort((a, b) => a.grid - b.grid);
+
+	console.log(diffSetups);
 
 	let playerGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
 	let targetGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
@@ -17,46 +129,11 @@
 	let targetRotation = 0;
 	let gridsCount = 1;
 	let stopPointerHold = 0;
+	let currentSpinSetupI = 0;
 	let gridRand = seededSfc32(gameSeed);
 	let spinRand = seededSfc32(gameSeed);
 	for (let i = 0; i < 100; i++) {
 		spinRand();
-	}
-
-	/**
-	 * example with delay = 5, period = 8, begin = 0.5, increment = 0.2
-	 * ```
-	 * score          5    10   15   20   25
-	 *        <--0----'----'----'----'----'>
-	 * delay  -------]
-	 * period         [------][------][---->
-	 * return 0      ]|[0.5  ][0.7   ][0.9 >
-	 *                1
-	 * ```
-	 * @param score
-	 * @param delay
-	 * @param period
-	 * @param increment
-	 */
-	function getProbabilty(
-		score: number,
-		delay: number,
-		period: number,
-		begin: number,
-		increment: number
-	) {
-		if (score === delay) return 1;
-		if (score < delay) return 0;
-		return Math.floor((score - delay + period) * (1 / period)) * increment + begin;
-	}
-
-	/**
-	 * @param frac 0-1
-	 * @param min inclusive
-	 * @param max inclusive
-	 */
-	function getInt(frac: number, min: number, max: number) {
-		return Math.floor(frac * (max - min + 1)) + min;
 	}
 
 	function startNewGrid() {
@@ -68,18 +145,35 @@
 		}
 	}
 
+	/**
+	 * @returns an int with an absolute value between absmin and absmax (inclusive),
+	 * with a possibility of being negative
+	 */
+	function getRandomInt(absmin: number, random: number, absmax: number) {
+		return Math.floor((random % 0.5) * 2 * (absmax - absmin) + absmin) * (random < 0.5 ? 1 : -1);
+	}
+
 	function spinIt() {
+		while (
+			currentSpinSetupI != diffSetups.length - 1 &&
+			diffSetups[currentSpinSetupI + 1].grid <= gridsCount
+		) {
+			currentSpinSetupI++;
+		}
+		const currSetup = diffSetups[currentSpinSetupI];
 		const tempA = spinRand();
 		const tempB = spinRand();
 		const tempC = spinRand();
 		const tempD = spinRand();
-		if (tempA < getProbabilty(gridsCount, 5, 5, 0.5, 0.056)) {
-			const tempE = harderSpinThreshold <= gridsCount ? getInt(tempB, -2, 4) : getInt(tempB, 0, 2);
-			playerRotation += tempE <= 0 ? tempE - 1 : tempE;
+		if (currSetup.player != null) {
+			if (tempA < currSetup.player.chance) {
+				playerRotation += getRandomInt(1, tempB, currSetup.player.range.valueOf());
+			}
 		}
-		if (tempC < getProbabilty(gridsCount, 15, 3, 0.4, 0.05)) {
-			const tempE = harderSpinThreshold <= gridsCount ? getInt(tempD, -2, 4) : getInt(tempD, 0, 2);
-			targetRotation += tempE <= 0 ? tempE - 1 : tempE;
+		if (currSetup.target != null) {
+			if (tempC < currSetup.target.chance) {
+				targetRotation += getRandomInt(1, tempD, currSetup.target.range.valueOf());
+			}
 		}
 	}
 
@@ -92,7 +186,7 @@
 		return true;
 	}
 
-	function devcheat() {
+	async function devcheat() {
 		for (let y = 0; y < size; y++) {
 			for (let x = 0; x < size; x++) {
 				playerGrid[y][x] = targetGrid[y][x];
@@ -121,13 +215,13 @@
 	$: gameOver = remainTime < 0;
 
 	function increaseTime() {
-		deathTime += 2000;
+		deathTime += diffSetups[currentSpinSetupI].recovery;
 	}
 
 	function startTheTime() {
 		startTime = performance.now();
 		nowTime = startTime;
-		deathTime = startTime + 10000;
+		deathTime = startTime + 60000;
 		requestAnimationFrame(updateNowTime);
 	}
 	function updateNowTime() {
@@ -157,24 +251,35 @@
 			rotation={playerRotation}
 			noninteractive={countdownNum != 0 || gameOver}
 			{stopPointerHold}
+			--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
 		/>
 	</div>
 
 	<div>
 		<div>
 			<p>target</p>
-			<GameGrid bind:grid={targetGrid} rotation={targetRotation} noninteractive small />
+			<GameGrid
+				bind:grid={targetGrid}
+				rotation={targetRotation}
+				noninteractive
+				small
+				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+			/>
 		</div>
 	</div>
 </div>
 
+<button on:click={devcheat}>dev cheat</button>
+
 <p>
 	gameseed: <code>{gameSeed}</code>
+	<br />
+	<code>{currentSpinSetupI}</code>
+	<br />
+	<code>{JSON.stringify(diffSetups[currentSpinSetupI])}</code>
 </p>
 
 <p>grid no. {gridsCount}</p>
-
-<button on:click={devcheat}>dev cheat</button>
 
 <style>
 	div.gamecontainer {

@@ -26,7 +26,7 @@
 <style>
 	div.spinny {
 		display: inline-block;
-		transition: rotate 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+		transition: rotate var(--spinDuration, 0.5s) cubic-bezier(0.33, 1, 0.68, 1);
 	}
 	div.theflex {
 		display: flex;
