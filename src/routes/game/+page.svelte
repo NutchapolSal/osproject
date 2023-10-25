@@ -6,23 +6,6 @@
 			time--;
 		}, 1000);
 
-	// setInterval(() => {
-	// 	tick--;
-	// }, 1000);
-
-	// const tick = () => {
-	// let e = document.querySelector('.couter');
-	// let timer = setInterval(() => {
-	// 	e.innerHTML = `<span>${time}</span>`;
-	// 	time--;
-	// 	if (time == 0) {
-	// 		clearInterval(timer);
-	// 		e.innerHTML = `<span>Let's GO!</span>`;
-	// 		window.location.href = './game';
-	// 	}
-	// }, 1000);
-	// };
-	// tick();
 </script>
 
 <div>
