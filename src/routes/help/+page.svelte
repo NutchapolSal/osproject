@@ -1,20 +1,30 @@
-<script>
-    import wbackImage from '$lib/images/wback.png';
-</script>
-<a href="./" class="menu-icon">
-    <img src={wbackImage} alt="settings" width="45px" height="45px" />
-</a>
 <div class="widget-header">
 	<h1>How To Play</h1>
 </div>
-<div class="paragraph">
-    <p1> เกมจะแบ่งเป็น 2 ส่วน คือส่วน pattern ที่ให้เรากดตาม(ด้านขวา) และส่วนที่เราจะกดตาม pattern(ด้านซ้าย)</p1>
-    <p1> โดยเกมจะมีสัญลักษ์สีเหลืองที่มุมซ้ายบน เพื่อเป็นจุดสังเกตให้กดตาม</p1>
-    <p1>เมื่อเวลาผ่านไป ในส่วนของกระดานของเราที่ต้องกดตามนั้นจะมีการหมุน เพื่อเพิ่มความยากให้กับเกม</p1>
-    <p1>คะแนนจะคิดจากจำนวนกระดานที่เคลีย ยิ่งเคลียมากคะแนนก็จะมากขึ้นเรื่อย</p1>
-    <p1>5.</p1>
+<div class="how-to-play-menu">
+	<div class="step">เกมจะแบ่งเป็น 2 ส่วน คือส่วน pattern ที่ให้เรากดตาม(ด้านขวา) 
+		และส่วนที่เราจะกดตาม pattern(ด้านซ้าย)</div>
+	<div class="step">โดยเกมจะมีสัญลักษ์สีเหลืองที่มุมซ้ายบน เพื่อเป็นจุดสังเกตให้กดตาม</div>
+	<div class="step">คะแนนจะคิดจากจำนวนกระดานที่เล่นผ่าน ยิ่งผ่านมากคะแนนก็จะมากขึ้นเรื่อยๆ</div>
+	
 </div>
+
 <style>
+	.how-to-play-menu {
+		border-radius: 25px;
+		background: var(--base-black);
+		padding: 20px;
+		width: 90%;
+		height: 100%;
+	}
+
+	.step {
+		margin-bottom: 2px;
+		font-size: 40px;
+		color: white;
+		font-family: myFirstFont;
+		justify-content: center;
+	}
 	.widget-header h1 {
 		width: 100%;
 		display: flex;
@@ -27,43 +37,4 @@
 		line-height: 1;
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
-
-    .menu-icon {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		width: 97%;
-		gap: 100px;
-        /* background: none;
-		border: 1px; */
-		cursor: pointer;
-	}
-    
-    .paragraph {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 20px;
-		padding-top: 0%;
-	}
-    
-    p1{
-        text-decoration: none;
-		color: #fff;
-		background: var(--base-black);
-		font-size: 33px;
-		font-weight: 600;
-		font-family: myFirstFont;
-		padding: 10px;
-		border-radius: 980px;
-    }
-
-    
-
-
-    
-	
 </style>
