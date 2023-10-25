@@ -1,5 +1,5 @@
 import { createNewScore } from '$lib/server/db';
-import { PostgresError } from 'postgres';
+import postgres from 'postgres';
 import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async () => ({
 	gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
@@ -34,7 +34,8 @@ export const actions = {
 			};
 			await createNewScore(dbInput);
 		} catch (error) {
-			if (error instanceof TypeError || error instanceof PostgresError) {
+			// https://github.com/porsager/postgres/issues/684
+			if (error instanceof TypeError || error instanceof postgres.PostgresError) {
 				return new Response(null, { status: 400 });
 			}
 		}
