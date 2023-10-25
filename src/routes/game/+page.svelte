@@ -130,6 +130,7 @@
 	let gridsCount = 1;
 	let stopPointerHold = 0;
 	let currentSpinSetupI = 0;
+	let dateTimeStart: Date | null = null;
 	let gridRand = seededSfc32(gameSeed);
 	let spinRand = seededSfc32(gameSeed);
 	for (let i = 0; i < 100; i++) {
@@ -219,6 +220,7 @@
 	}
 
 	function startTheTime() {
+		dateTimeStart = new Date();
 		startTime = performance.now();
 		nowTime = startTime;
 		deathTime = startTime + 60000;
@@ -280,6 +282,19 @@
 </p>
 
 <p>grid no. {gridsCount}</p>
+
+{#if gameOver}
+	<p>game over</p>
+	<form method="POST">
+		<input type="hidden" name="score" value={gridsCount - 1} />
+		<input type="hidden" name="gameSeed" value={gameSeed} />
+		<input type="hidden" name="gameMode" value={'normal'} />
+		<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
+		<input type="hidden" name="gameDuration" value={deathTime - startTime} />
+		<input type="hidden" name="gameVersion" value={'asd'} />
+		<button>submit score</button>
+	</form>
+{/if}
 
 <style>
 	div.gamecontainer {
