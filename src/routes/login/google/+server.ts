@@ -1,8 +1,8 @@
 import { dev } from '$app/environment';
-import { googleAuth } from '$lib/server/lucia';
+import { getGoogleAuth } from '$lib/server/lucia';
 
-export const GET = async ({ cookies }) => {
-	const [url, state] = await googleAuth.getAuthorizationUrl();
+export const GET = async ({ url, cookies }) => {
+	const [authUrl, state] = await getGoogleAuth(url.origin).getAuthorizationUrl();
 
 	cookies.set('google_oauth_state', state, {
 		httpOnly: true,
@@ -10,5 +10,5 @@ export const GET = async ({ cookies }) => {
 		path: '/',
 		maxAge: 60 * 60
 	});
-	return new Response(null, { status: 302, headers: { Location: url.toString() } });
+	return new Response(null, { status: 302, headers: { Location: authUrl.toString() } });
 };

@@ -1,4 +1,4 @@
-import { auth, googleAuth } from '$lib/server/lucia';
+import { auth, getGoogleAuth } from '$lib/server/lucia';
 import { OAuthRequestError } from '@lucia-auth/oauth';
 
 export const GET = async ({ url, cookies, locals }) => {
@@ -10,7 +10,7 @@ export const GET = async ({ url, cookies, locals }) => {
 		return new Response(null, { status: 400 });
 	}
 	try {
-		const res = await googleAuth.validateCallback(code);
+		const res = await getGoogleAuth(url.origin).validateCallback(code);
 		const getUser = async () => {
 			const existingUser = await res.getExistingUser();
 			if (existingUser) {

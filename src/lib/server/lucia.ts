@@ -22,10 +22,23 @@ export const auth = lucia({
 	}
 });
 
-export const googleAuth = google(auth, {
+let lastOrigin = '';
+let lastGoogleAuth = google(auth, {
 	clientId: env.GOOGLE_AUTH_CLIENT_ID,
 	clientSecret: env.GOOGLE_AUTH_CLIENT_SECRET,
-	redirectUri: `${env.WEBSERVER_HOSTNAME}/login/google/callback`
+	redirectUri: `/login/google/callback`
 });
+
+export function getGoogleAuth(origin: string) {
+	if (lastOrigin !== origin) {
+		lastOrigin = origin;
+		lastGoogleAuth = google(auth, {
+			clientId: env.GOOGLE_AUTH_CLIENT_ID,
+			clientSecret: env.GOOGLE_AUTH_CLIENT_SECRET,
+			redirectUri: `${origin}/login/google/callback`
+		});
+	}
+	return lastGoogleAuth;
+}
 
 export type Auth = typeof auth;
