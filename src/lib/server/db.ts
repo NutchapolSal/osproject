@@ -1,5 +1,6 @@
 import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
+import { building } from '$app/environment';
 
 const sql = postgres({
 	host: env.POSTGRES_HOSTNAME,
@@ -8,19 +9,20 @@ const sql = postgres({
 	password: env.POSTGRES_PASSWORD
 });
 
-await sql`
+if (!building) {
+	await sql`
 CREATE TABLE IF NOT EXISTS "auth_user" (
     id TEXT PRIMARY KEY,
     display_name TEXT NOT NULL,
     shadowbanned BOOLEAN NOT NULL DEFAULT FALSE
 )`;
-await sql`
+	await sql`
 CREATE TABLE IF NOT EXISTS "user_key" (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES auth_user(id),
     hashed_password TEXT
 )`;
-await sql`
+	await sql`
 CREATE TABLE IF NOT EXISTS "user_session" (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES auth_user(id),
@@ -28,7 +30,7 @@ CREATE TABLE IF NOT EXISTS "user_session" (
     idle_expires BIGINT NOT NULL
 )`;
 
-await sql`
+	await sql`
 CREATE TABLE IF NOT EXISTS "score" (
 	"id" UUID NOT NULL,
 	"user_id" TEXT NOT NULL REFERENCES auth_user(id),
@@ -40,7 +42,7 @@ CREATE TABLE IF NOT EXISTS "score" (
 	"game_duration" INTEGER NOT NULL,
 	PRIMARY KEY ("id")
 )`;
-
+}
 
 export async function createNewScore(v: {
 	userId: string;
