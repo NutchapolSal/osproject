@@ -240,44 +240,20 @@
 		}, 1000);
 	});
 
-	let energyLevel = 100; // ระดับพลังงานเริ่มต้น
-	let timerInterval = setInterval(updateTimer, 1);
-
-	function stopTimer() {
-		clearInterval(timerInterval);
-	}
-
-	function resetTimer() {
-		clearInterval(timerInterval);
-		energyLevel = 100;
-	}
+	let timerInterval = setInterval(updateTimer, 100);
+	let energyBarClass = '';
 
 	function updateTimer() {
-		if (energyLevel > 0.02) {
-			energyLevel -= 0.02;
+		if (remainTime / 600 <= 30) {
+			energyBarClass = 'energy-bar-low';
 		} else {
-			stopTimer();
+			energyBarClass = 'energy-bar';
 		}
-
-		// เปลี่ยนสีเมื่อ energyLevel ต่ำกว่าหรือเท่ากับ 40
-		// if (energyLevel <= 90) {
-		// 	const energyBar = document.querySelector('.energy-bar');
-		// 	if (energyBar) {
-		// 		if (energyLevel <= 90) {
-		// 			energyBar.classList.add('.energy-bar.low');
-		// 		}
-		// 	}
-		// 	if (energyLevel > 0) {
-		// 		energyLevel -= 0.02;
-		// 	} else {
-		// 		stopTimer();
-		// 	}
-		// }
 	}
 </script>
 
 <div class="barcontainer">
-	<div class="energy-bar" style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
+	<div class={energyBarClass} style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
 </div>
 <div class="gamecontainer">
 	<div class="game-content">
@@ -362,12 +338,15 @@
 	.energy-bar {
 		height: 30px;
 		background-color: var(--base-orange);
-		/* transition: width 0.1s; */
 		box-shadow: 0 0 10px var(--base-black);
 		border-radius: 25px;
 	}
 
-	/* .energy-bar.low { */
-	/* background-color: #711308; สีแดงเข้มเมื่อพลังงานน้อย */
-	/* } */
+	.energy-bar-low {
+		height: 30px;
+		background-color: #711308;
+		transition: width 0.1s;
+		box-shadow: 0 0 10px var(--base-black);
+		border-radius: 25px;
+	}
 </style>
