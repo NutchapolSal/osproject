@@ -240,7 +240,7 @@
 		}, 1000);
 	});
 
-		let energyLevel = 100; // ระดับพลังงานเริ่มต้น
+	let energyLevel = 100; // ระดับพลังงานเริ่มต้น
 	let timerInterval = setInterval(updateTimer, 1);
 
 	function stopTimer() {
@@ -274,16 +274,12 @@
 		// 	}
 		// }
 	}
-
 </script>
 
-<!-- <h1>epic gamo</h1> -->
-<h2>{countdownNum}</h2>
-<h2>{Math.floor(remainTime)}</h2>
-<div class="gamecontainer">
-<div class="energy-bar" style="width: {energyLevel}%">
-	{energyLevel.toFixed(2)}
+<div class="barcontainer">
+	<div class="energy-bar" style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
 </div>
+<div class="gamecontainer">
 	<div class="game-content">
 		<div>
 			<GameGrid
@@ -315,7 +311,17 @@
 		display: grid;
 		grid-template-columns: auto auto;
 		justify-content: space-around;
+		align-items: center;
 		gap: 100px;
+	}
+
+	div.barcontainer {
+		width: 70%;
+		height: 30px;
+		background-color: #d3d3d3;
+		border-radius: 25px;
+		margin-top: 60px;
+		margin-bottom: 60px;
 	}
 
 	.game-content {
@@ -354,16 +360,14 @@
 	}
 
 	.energy-bar {
-		background-color: #ff5722; /* สีส้มเข้ม */
-		color: #fff;
-		text-align: center;
-		font-size: 20px;
-		padding: 10px;
-		transition: width 0.5s; /* เพิ่มเอฟเฟกต์การเปลี่ยนรูปแบบ */
-		box-shadow: 0 0 10px rgba(255, 87, 34, 0.7); /* เพิ่มเอฟเฟกต์เงา */
+		height: 30px;
+		background-color: var(--base-orange);
+		/* transition: width 0.1s; */
+		box-shadow: 0 0 10px var(--base-black);
+		border-radius: 25px;
 	}
 
 	/* .energy-bar.low { */
-		/* background-color: #711308; สีแดงเข้มเมื่อพลังงานน้อย */
+	/* background-color: #711308; สีแดงเข้มเมื่อพลังงานน้อย */
 	/* } */
 </style>
