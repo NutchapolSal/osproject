@@ -38,12 +38,5 @@ export const actions = {
 				return new Response(null, { status: 400 });
 			}
 		}
-
-		console.log(data);
-		console.log('-');
-		console.log(session);
-		console.log('-');
-		console.log(cookies);
-		console.log('----------------');
 	}
 };
