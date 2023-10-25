@@ -14,55 +14,44 @@
 	}
 </script>
 
-<div class="containner">
-	<div class="button-icon">
-		<img src={settingImage} alt="settings" width="50px" height="50px" />
-		<button on:click={toggleImage} class="clickable-image">
-			<img src={imageSource} alt="settings" width="50px" height="50px" />
-		</button>
-	</div>
-
-	<h1>Candy Rotator</h1>
-	<a href="./game">🎃 Start 🦇</a>
-	<div class="button-group">
-		{#each gameMode as mode}
-			<button
-				aria-current={selected === mode}
-				aria-label={mode}
-				on:click={() => (selected = mode)}
-				class="button-mode">{mode}</button
-			>
-		{/each}
-	</div>
-	<a href="./help">How to play🧟‍♂️</a>
+<div class="menu-icon">
+	<img src={settingImage} alt="settings" width="45px" height="45px" />
+	<button on:click={toggleImage} class="clickable-image">
+		<img src={imageSource} alt="settings" width="45px" height="45px" />
+	</button>
 </div>
+<div class="widget-header">
+	<h1>Candy Rotator</h1>
+</div>
+<a href="./game">🎃 Start 🦇</a>
+<div class="menu-group">
+	{#each gameMode as mode}
+		<button
+			aria-current={selected === mode}
+			aria-label={mode}
+			on:click={() => (selected = mode)}
+			class="menu-mode">{mode}</button
+		>
+	{/each}
+</div>
+<a href="./leaderBoard">🧛Leader Board</a>
+<a href="./help">How to play🧟</a>
 
 <style>
-	@font-face {
-		font-family: myFirstFont;
-		src: url('$lib/fonts/MN KRASIP.ttf');
-	}
-
-	.containner {
+	.widget-header h1 {
 		width: 100%;
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 16px;
-		padding-top: 0%;
-	}
-
-	h1 {
 		font-family: myFirstFont;
 		font-size: 150px;
 		margin-top: 0%;
 		margin-bottom: 0%;
 		color: var(--base-orange);
+		text-align: center;
+		line-height: 1;
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
 
-	.button-icon {
+	.menu-icon {
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
@@ -71,33 +60,16 @@
 		gap: 10px;
 	}
 
-	.button-group {
+	.menu-group {
+		display: flex;
 		flex-direction: row;
 		gap: 16px;
 	}
 
-	a {
-		text-decoration: none;
-		color: #fff;
-		background: var(--base-black);
-		font-size: 40px;
-		font-weight: 600;
-		font-family: 'Roboto', sans-serif;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+	.menu-mode {
 		border-radius: 980px;
-	}
-
-	a:hover {
-		background-color: var(--base-orange);
-	}
-
-	.button-mode {
-		border-radius: 980px;
-		font-family: 'Roboto', sans-serif;
-		font-size: 40px;
+		font-family: myFirstFont;
+		font-size: 50px;
 		font-weight: 600;
 		background: var(--base-black);
 		color: #fff;
@@ -108,6 +80,24 @@
 		padding-right: 24px;
 		padding-top: 16px;
 		padding-bottom: 16px;
+	}
+
+	a {
+		text-decoration: none;
+		color: #fff;
+		background: var(--base-black);
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		padding-left: 24px;
+		padding-right: 24px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		border-radius: 980px;
+	}
+
+	a:hover {
+		background-color: var(--base-orange);
 	}
 
 	button[aria-current='true'] {
