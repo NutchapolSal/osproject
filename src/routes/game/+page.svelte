@@ -13,25 +13,11 @@
 </div>
 
 <style>
-	/* :global(body) {
-		background-color: #0d1229;
-		color: #0084f6;
-		text-align: center;
-		font-size: 50px;
-		font-family: 'Roboto', sans-serif;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		overflow: hidden;
-		transition: background-color 0.3s;
-	} */
 	.counter {
 		display: inline-block;
 		vertical-align: middle;
 		opacity: 0;
 		animation: anime 1s ease-in-out 1s forwards;
-		/* line-height: 1em; */
-		/* transition: transform 0.3s; */
 	}
 
 	@keyframes anime {
