@@ -1,0 +1,34 @@
+x-variables: &variables
+  # create a google cloud project
+  # then APIs & Services > Credentials > Create Credentials > OAuth Client IDs
+  # put in https://yoursite.com/login/google/callback
+  # as an authorized redirect URI (or use http if https is not available)
+  # OAuth Consent Screen scopes: none
+  GOOGLE_AUTH_CLIENT_ID: 123abc123abc
+  GOOGLE_AUTH_CLIENT_SECRET: asdasdasdasd
+
+  # this should be the postgres container's name
+  POSTGRES_HOSTNAME: postgres
+
+x-postgresvars: &postgresvars
+  POSTGRES_USER: osproject
+  POSTGRES_PASSWORD: pnaeibpbiaparpipabpaib # type anything in here
+
+services:
+  webserver:
+    image: nutchapolsal/osproject
+    environment:
+      <<: *variables
+      <<: *postgresvars
+      
+  postgres:
+    image: postgres
+    environment:
+      <<: *variables
+      <<: *postgresvars
+    volumes:
+      - "osproject-data:/var/lib/postgresql/data"
+
+volumes:
+  osproject-data:
+    name: osproject-data
