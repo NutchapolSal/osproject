@@ -5,6 +5,7 @@
 	export let noninteractive: boolean = false;
 	export let stopPointerHold: number = 0;
 	export let small: boolean = false;
+	export let blanked: boolean = false;
 </script>
 
 <div class="spinny" style:rotate={`${0.25 * rotation}turn`}>
@@ -17,6 +18,7 @@
 					{noninteractive}
 					{stopPointerHold}
 					{small}
+					{blanked}
 				/>
 			{/each}
 		</div>
