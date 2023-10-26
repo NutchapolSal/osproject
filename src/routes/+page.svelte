@@ -21,7 +21,7 @@
 		<img src={imageSource} alt="settings" width="45px" height="45px" />
 	</button>
 	{#if data.displayName}
-		<p>{data.displayName}</p>
+		<a href="./profile">{data.displayName}</a>
 	{/if}
 </div>
 <div class="widget-header">
@@ -62,6 +62,11 @@
 		align-items: center;
 		width: 100%;
 		gap: 10px;
+	}
+
+	.menu-icon a {
+		font-size: 3.5vmin;
+		margin-left: auto;
 	}
 
 	.menu-group {

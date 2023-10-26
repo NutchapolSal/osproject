@@ -23,7 +23,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 16px;
+		gap: 2vmin;
 		padding-top: 0%;
 	}
 </style>

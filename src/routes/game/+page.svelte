@@ -298,6 +298,37 @@
 				<p>game over</p>
 				<p>
 					score : {score}
+					{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
+						<form
+							method="POST"
+							use:enhance={() => {
+								scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
+								return async ({ update }) => {
+									await update();
+									scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+								};
+							}}
+						>
+							<input type="hidden" name="score" value={gridsCount - 1} />
+							<input type="hidden" name="gameSeed" value={gameSeed} />
+							<input type="hidden" name="gameMode" value={'normal'} />
+							<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
+							<input type="hidden" name="gameDuration" value={deathTime - startTime} />
+							<input type="hidden" name="gameVersion" value={'asd'} />
+							<button>submit score</button>
+						</form>
+					{/if}
+					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
+						<p>💫</p>
+					{/if}
+
+					{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
+						<p>💢</p>
+					{/if}
+
+					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
+						<p>✅</p>
+					{/if}
 				</p>
 				<div class="gameover-menu">
 					<a href="#" on:click={() => location.reload()}>🎃 restart 🦇</a>
@@ -306,40 +337,6 @@
 			</div>
 		{/if}
 	</div>
-{/if}
-
-{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
-	<p>game over</p>
-	<form
-		method="POST"
-		use:enhance={() => {
-			scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
-			return async ({ update }) => {
-				await update();
-				scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
-			};
-		}}
-	>
-		<input type="hidden" name="score" value={gridsCount - 1} />
-		<input type="hidden" name="gameSeed" value={gameSeed} />
-		<input type="hidden" name="gameMode" value={'normal'} />
-		<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
-		<input type="hidden" name="gameDuration" value={deathTime - startTime} />
-		<input type="hidden" name="gameVersion" value={'asd'} />
-		<button>submit score</button>
-	</form>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
-	<p>💫</p>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
-	<p>💢</p>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
-	<p>✅</p>
 {/if}
 
 <style>
@@ -420,6 +417,7 @@
 	}
 
 	.content-center p {
+		display: flex;
 		color: #090505;
 		font-size: 50px;
 		font-weight: 600;
@@ -427,6 +425,7 @@
 		border-radius: 980px;
 		margin-top: 0%;
 		margin-bottom: 0%;
+		gap: 16px;
 	}
 
 	.gameover-menu {
@@ -437,11 +436,12 @@
 		gap: 1.5vmin;
 	}
 
-	.gameover-menu a {
+	.gameover-menu a,
+	.content-center button {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
-		font-size: 50px;
+		font-size: 6vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
 		padding-left: 24px;
@@ -450,5 +450,15 @@
 		padding-bottom: 16px;
 		border-radius: 980px;
 		white-space: nowrap;
+	}
+
+	.content-center button {
+		display: flex;
+		width: 25vmin;
+		height: 8vmin;
+		font-size: 4vmin;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
