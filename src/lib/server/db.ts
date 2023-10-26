@@ -125,4 +125,8 @@ export async function getLeaderboards() {
 	return results;
 }
 
+export async function updateDisplayName(userId: string, displayName: string) {
+	await sql`UPDATE auth_user SET display_name = ${displayName} WHERE id = ${userId}`;
+}
+
 export default sql;
