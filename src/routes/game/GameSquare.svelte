@@ -44,11 +44,21 @@
 {/if}
 
 <style>
+	button {
+		background-color: transparent;
+		border: none;
+	}
+
 	.gamesquare {
 		width: 20vmin;
 		height: 20vmin;
-		border: #000000 1px solid;
+		background-image: url('$lib/images/candy.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+		filter: grayscale(100%) drop-shadow(0px 0px 5px var(--base-black));
 		touch-action: none;
+		border-radius: 15px;
 	}
 	div.gamesquare {
 		display: inline-block;
@@ -58,13 +68,22 @@
 		height: 10vmin;
 	}
 	.gamesquare.stateOn {
-		background-color: black;
-		color: white;
+		filter: grayscale(0%) drop-shadow(0px 0px 5px var(--base-black));
 	}
 	.gamesquare.corner {
-		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%);
+		position: relative;
+		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%),
+			url('$lib/images/candy-grey.png');
+		filter: grayscale(0%) drop-shadow(0px 0px 5px var(--base-black));
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 	.gamesquare.corner.stateOn {
-		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%), black;
+		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%),
+			url('$lib/images/candy.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 </style>

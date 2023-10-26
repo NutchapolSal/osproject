@@ -2,9 +2,7 @@
 	import settingImage from '$lib/images/settings.png';
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
-
-	const gameMode = ['Normal', 'Memory'];
-	let selected = gameMode[0];
+	import { GameModes, gameModeStore } from './gameModes';
 
 	let showSpeakerImage = true;
 	let imageSource = speakerImageOn;
@@ -25,11 +23,11 @@
 </div>
 <a href="./game">🎃 Start 🦇</a>
 <div class="menu-group">
-	{#each gameMode as mode}
+	{#each Object.values(GameModes) as mode}
 		<button
-			aria-current={selected === mode}
+			aria-current={$gameModeStore == mode}
 			aria-label={mode}
-			on:click={() => (selected = mode)}
+			on:click={() => ($gameModeStore = mode)}
 			class="menu-mode">{mode}</button
 		>
 	{/each}

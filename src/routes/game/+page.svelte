@@ -1,14 +1,17 @@
 <script lang="ts">
-	import GameSquare from './GameSquare.svelte';
 	import { seededSfc32 } from '$lib/rng';
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
+	import { gameModeStore } from '../gameModes';
+	import { fade } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
+
 
 	export let data;
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
+	const startRemainTime = 60000;
 
 	enum SpinRange {
 		NINETIES = 1,
@@ -194,6 +197,8 @@
 		}
 	}
 
+	$: score = (gridsCount - 1) * 10;
+
 	startNewGrid();
 	spinIt();
 	$: {
@@ -213,6 +218,7 @@
 	let deathTime: number = 0;
 	$: remainTime = deathTime - nowTime;
 	$: gameOver = remainTime < 0;
+	$: timeBarFrac = remainTime / startRemainTime;
 
 	function increaseTime() {
 		deathTime += diffSetups[currentSpinSetupI].recovery;
@@ -221,7 +227,7 @@
 	function startTheTime() {
 		startTime = performance.now();
 		nowTime = startTime;
-		deathTime = startTime + 60000;
+		deathTime = startTime + startRemainTime;
 		requestAnimationFrame(updateNowTime);
 	}
 	function updateNowTime() {
@@ -241,21 +247,15 @@
 	});
 </script>
 
-<h1>epic gamo</h1>
-<h2>{countdownNum}</h2>
-<h2>{Math.floor(remainTime)}</h2>
+<div class="barcontainer">
+	<div
+		class="energy-bar"
+		class:low={timeBarFrac <= 0.3 && countdownNum == 0}
+		style="width: {countdownNum > 0 ? 100 : timeBarFrac * 100}%"
+	/>
+</div>
 <div class="gamecontainer">
-	<div>
-		<GameGrid
-			bind:grid={playerGrid}
-			rotation={playerRotation}
-			noninteractive={countdownNum != 0 || gameOver}
-			{stopPointerHold}
-			--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
-		/>
-	</div>
-
-	<div>
+	<div class="game-content">
 		<div>
 			<p>target</p>
 			<GameGrid
@@ -267,24 +267,146 @@
 			/>
 		</div>
 	</div>
+
+	<div class="game-content">
+		<div>
+			<GameGrid
+				bind:grid={playerGrid}
+				rotation={playerRotation}
+				noninteractive={countdownNum != 0 || gameOver}
+				{stopPointerHold}
+				--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
+			/>
+		</div>
+	</div>
 </div>
 
-<button on:click={devcheat}>dev cheat</button>
-
-<p>
-	gameseed: <code>{gameSeed}</code>
-	<br />
-	<code>{currentSpinSetupI}</code>
-	<br />
-	<code>{JSON.stringify(diffSetups[currentSpinSetupI])}</code>
-</p>
-
-<p>grid no. {gridsCount}</p>
+{#if 0 < countdownNum || gameOver}
+	<div class="splash-screen" transition:fade={{ easing: cubicInOut }}>
+		{#if !gameOver}
+			<h1 class="content-center">{countdownNum}</h1>
+		{:else}
+			<div class="content-center">
+				<p>game over</p>
+				<p>
+					score : {score}
+				</p>
+				<div class="gameover-menu">
+					<a href="#" on:click={() => location.reload()}>🎃 restart 🦇</a>
+					<a href="./">🎃 back 🦇</a>
+				</div>
+			</div>
+		{/if}
+	</div>
+{/if}
 
 <style>
 	div.gamecontainer {
 		display: flex;
-		flex-direction: row;
 		justify-content: space-around;
+		align-items: center;
+		gap: 2vmin;
+		flex-direction: row-reverse;
+		flex-wrap: wrap;
+	}
+
+	div.barcontainer {
+		width: 70%;
+		height: 4vmin;
+		background-color: #d3d3d3;
+		border-radius: 4vmin;
+		margin-top: 6vmin;
+		margin-bottom: 6vmin;
+	}
+
+	.energy-bar {
+		height: 4vmin;
+		background-color: var(--base-orange);
+		box-shadow: 0 0 10px var(--base-black);
+		border-radius: 4vmin;
+		transition: width 0.1s, background-color 0.25s;
+	}
+
+	.game-content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--base-orange);
+		border: 2vmin solid var(--base-black);
+		border-radius: 4vmin;
+		box-shadow: 0px 0px 10px var(--base-black);
+		padding: 2vmin;
+	}
+
+	p {
+		font-family: myFirstFont;
+		font-size: 7.5vmin;
+		font-weight: 1000;
+		color: var(--base-black);
+		text-shadow: 0px 0px 10px var(--base-orange);
+		text-align: center;
+		margin-top: 0px;
+		margin-bottom: 20px;
+	}
+
+	.energy-bar.low {
+		background-color: #711308;
+	}
+
+	.splash-screen {
+		background-size: cover;
+		height: 100vh;
+		width: 100vw;
+		font-size: 125px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		backdrop-filter: blur(10px);
+		position: fixed;
+		top: 0px;
+		left: 0px;
+	}
+
+	.content-center {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-family: myFirstFont;
+		gap: 16px;
+	}
+
+	.content-center p {
+		color: #090505;
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		border-radius: 980px;
+		margin-top: 0%;
+		margin-bottom: 0%;
+	}
+
+	.gameover-menu {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.5vmin;
+	}
+
+	.gameover-menu a {
+		text-decoration: none;
+		color: #fff;
+		background: var(--base-black);
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		padding-left: 24px;
+		padding-right: 24px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		border-radius: 980px;
+		white-space: nowrap;
 	}
 </style>
