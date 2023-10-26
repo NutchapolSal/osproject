@@ -6,13 +6,22 @@ export enum GameModes {
 	Memory = 'Memory'
 }
 
+export function reverseMapGameModes(v: string) {
+	switch (v) {
+		case 'Normal':
+			return GameModes.Normal;
+		case 'Memory':
+			return GameModes.Memory;
+		default:
+			return null;
+	}
+}
+
 function getDefault(): GameModes {
 	if (browser && typeof localStorage !== 'undefined') {
 		const stored = localStorage.getItem('gameMode');
-		if (Object.values(GameModes).includes(stored as GameModes)) {
-			return stored as GameModes;
-		}
-		return GameModes.Normal;
+		if (stored == null) return GameModes.Normal;
+		return reverseMapGameModes(stored) ?? GameModes.Normal;
 	}
 	return GameModes.Normal;
 }

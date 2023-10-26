@@ -1,4 +1,6 @@
-<div class="containner">
+<div class="background" />
+
+<div class="container">
 	<slot />
 </div>
 
@@ -8,22 +10,30 @@
 		src: url('$lib/fonts/MN KRASIP.ttf');
 	}
 
+	.background {
+		z-index: -999;
+		background-image: url('$lib/images/bg.svg');
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100vh;
+		width: 100vw;
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+	}
 	:global(body) {
 		--base-black: #2e2c29;
 		--base-orange: #e6862e;
-		background-image: url('$lib/images/bg.svg');
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
 	}
 
-	.containner {
+	.container {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 16px;
+		gap: 2vmin;
 		padding-top: 0%;
 	}
 </style>

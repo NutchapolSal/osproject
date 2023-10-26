@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
 import { building } from '$app/environment';
+import type { GameModes } from '../../routes/gameModes';
 
 const sql = postgres({
 	host: env.POSTGRES_HOSTNAME,
@@ -65,6 +66,69 @@ export async function createNewScore(v: {
 	await sql`INSERT INTO "score"
     ${sql(newObj)}
     `;
+}
+
+export async function getUserFromId(id: string) {
+	const user = (await sql`SELECT * FROM auth_user WHERE id = ${id}`)[0];
+	if (user == null) {
+		return null;
+	}
+	return {
+		id: user.id,
+		displayName: user.display_name
+	};
+}
+
+export async function getScoresFromUserId(id: string) {
+	const results: {
+		score: number;
+		gameMode: string;
+		timeStart: Date;
+	}[] = [];
+	await sql`
+	SELECT score.score, score.game_mode, score.time_start FROM score
+	WHERE score.user_id = ${id}
+	ORDER BY score DESC
+	LIMIT 10
+	`.forEach((score) => {
+		results.push({
+			score: score.score,
+			gameMode: score.game_mode,
+			timeStart: score.time_start
+		});
+	});
+
+	return results;
+}
+
+export async function getLeaderboards(gameMode: GameModes) {
+	const results: {
+		score: number;
+		gameMode: string;
+		timeStart: Date;
+		userId: string;
+		displayName: string;
+	}[] = [];
+	await sql`
+	SELECT score.score, score.game_mode, score.time_start, score.user_id, auth_user.display_name FROM score
+	INNER JOIN auth_user ON score.user_id = auth_user.id
+	WHERE score.game_mode = ${gameMode}
+	ORDER BY score DESC
+	`.forEach((score) => {
+		results.push({
+			score: score.score,
+			gameMode: score.game_mode,
+			timeStart: score.time_start,
+			userId: score.user_id,
+			displayName: score.display_name
+		});
+	});
+
+	return results;
+}
+
+export async function updateDisplayName(userId: string, displayName: string) {
+	await sql`UPDATE auth_user SET display_name = ${displayName} WHERE id = ${userId}`;
 }
 
 export default sql;

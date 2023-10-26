@@ -2,7 +2,7 @@
 	import { seededSfc32 } from '$lib/rng';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
-	import { gameModeStore } from '../gameModes';
+	import { GameModes, gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { enhance } from '$app/forms';
@@ -12,6 +12,8 @@
 
 	const size = 3;
 	const startRemainTime = 60000;
+	const memoryMode = $gameModeStore == GameModes.Memory;
+	const memoryModeTime = 3000;
 
 	enum SpinRange {
 		NINETIES = 1,
@@ -145,6 +147,8 @@
 	for (let i = 0; i < 100; i++) {
 		spinRand();
 	}
+	let blanked = memoryMode;
+	let blankTimer = setTimeout(() => {}, 0);
 
 	function startNewGrid() {
 		for (let y = 0; y < size; y++) {
@@ -216,6 +220,9 @@
 			startNewGrid();
 			stopPointerHold++;
 			spinIt();
+			if (memoryMode) {
+				unblank();
+			}
 		}
 	}
 
@@ -229,6 +236,14 @@
 
 	function increaseTime() {
 		deathTime += diffSetups[currentSpinSetupI].recovery;
+	}
+
+	function unblank() {
+		blanked = false;
+		clearTimeout(blankTimer);
+		blankTimer = setTimeout(() => {
+			blanked = true;
+		}, memoryModeTime);
 	}
 
 	function startTheTime() {
@@ -248,6 +263,9 @@
 		const countdownInterval = setInterval(() => {
 			countdownNum--;
 			if (countdownNum <= 0) {
+				if (memoryMode) {
+					unblank();
+				}
 				startTheTime();
 				clearInterval(countdownInterval);
 			}
@@ -272,6 +290,7 @@
 				noninteractive
 				small
 				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+				{blanked}
 			/>
 		</div>
 	</div>
@@ -298,6 +317,37 @@
 				<p>game over</p>
 				<p>
 					score : {score}
+					{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
+						<form
+							method="POST"
+							use:enhance={() => {
+								scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
+								return async ({ update }) => {
+									await update();
+									scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+								};
+							}}
+						>
+							<input type="hidden" name="score" value={score} />
+							<input type="hidden" name="gameSeed" value={gameSeed} />
+							<input type="hidden" name="gameMode" value={$gameModeStore} />
+							<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
+							<input type="hidden" name="gameDuration" value={deathTime - startTime} />
+							<input type="hidden" name="gameVersion" value={'asd'} />
+							<button>submit score</button>
+						</form>
+					{/if}
+					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
+						<p>💫</p>
+					{/if}
+
+					{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
+						<p>💢</p>
+					{/if}
+
+					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
+						<p>✅</p>
+					{/if}
 				</p>
 				<div class="gameover-menu">
 					<a href="#" on:click={() => location.reload()}>🎃 restart 🦇</a>
@@ -306,40 +356,6 @@
 			</div>
 		{/if}
 	</div>
-{/if}
-
-{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
-	<p>game over</p>
-	<form
-		method="POST"
-		use:enhance={() => {
-			scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
-			return async ({ update }) => {
-				await update();
-				scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
-			};
-		}}
-	>
-		<input type="hidden" name="score" value={gridsCount - 1} />
-		<input type="hidden" name="gameSeed" value={gameSeed} />
-		<input type="hidden" name="gameMode" value={'normal'} />
-		<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
-		<input type="hidden" name="gameDuration" value={deathTime - startTime} />
-		<input type="hidden" name="gameVersion" value={'asd'} />
-		<button>submit score</button>
-	</form>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
-	<p>💫</p>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
-	<p>💢</p>
-{/if}
-
-{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
-	<p>✅</p>
 {/if}
 
 <style>
@@ -420,6 +436,7 @@
 	}
 
 	.content-center p {
+		display: flex;
 		color: #090505;
 		font-size: 50px;
 		font-weight: 600;
@@ -427,6 +444,7 @@
 		border-radius: 980px;
 		margin-top: 0%;
 		margin-bottom: 0%;
+		gap: 16px;
 	}
 
 	.gameover-menu {
@@ -437,18 +455,29 @@
 		gap: 1.5vmin;
 	}
 
-	.gameover-menu a {
+	.gameover-menu a,
+	.content-center button {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
-		font-size: 50px;
+		font-size: 6vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 		border-radius: 980px;
 		white-space: nowrap;
+	}
+
+	.content-center button {
+		display: flex;
+		width: 25vmin;
+		height: 8vmin;
+		font-size: 4vmin;
+		text-align: center;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

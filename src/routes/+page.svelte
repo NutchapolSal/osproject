@@ -1,27 +1,13 @@
 <script lang="ts">
-	import settingImage from '$lib/images/settings.png';
-	import speakerImageOn from '$lib/images/sound-on.png';
-	import speakerImageOff from '$lib/images/sound-off.png';
 	import { GameModes, gameModeStore } from './gameModes';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	let showSpeakerImage = true;
-	let imageSource = speakerImageOn;
-	function toggleImage() {
-		showSpeakerImage = !showSpeakerImage;
-		imageSource = showSpeakerImage ? speakerImageOn : speakerImageOff;
-	}
 </script>
 
 <div class="menu-icon">
-	<img src={settingImage} alt="settings" width="45px" height="45px" />
-	<button on:click={toggleImage} class="clickable-image">
-		<img src={imageSource} alt="settings" width="45px" height="45px" />
-	</button>
-	{#if data.displayName}
-		<p>{data.displayName}</p>
+	{#if data.loginInfo}
+		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
 	{/if}
 </div>
 <div class="widget-header">
@@ -38,7 +24,7 @@
 		>
 	{/each}
 </div>
-<a href="./leaderBoard">🧛Leader Board</a>
+<a href="./leaderBoard/{$gameModeStore}">🧛Leader Board</a>
 <a href="./help">How to play🧟</a>
 
 <style>
@@ -46,7 +32,7 @@
 		width: 100%;
 		display: flex;
 		font-family: myFirstFont;
-		font-size: 150px;
+		font-size: 22vmin;
 		margin-top: 0%;
 		margin-bottom: 0%;
 		color: var(--base-orange);
@@ -64,6 +50,11 @@
 		gap: 10px;
 	}
 
+	.menu-icon a {
+		font-size: 3.5vmin;
+		margin-left: auto;
+	}
+
 	.menu-group {
 		display: flex;
 		flex-direction: row;
@@ -73,30 +64,30 @@
 	.menu-mode {
 		border-radius: 980px;
 		font-family: myFirstFont;
-		font-size: 50px;
+		font-size: 7.2vmin;
 		font-weight: 600;
 		background: var(--base-black);
 		color: #fff;
 		transform: translate(-2px, -2px);
 		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
 		transition: all 0.1s;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 	}
 
 	a {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
-		font-size: 50px;
+		font-size: 7.2vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 		border-radius: 980px;
 	}
 
@@ -111,16 +102,5 @@
 		/* box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.2); */
 		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
 		border: var(--base-orange) 2px solid;
-	}
-
-	.clickable-image {
-		background: none;
-		border: none;
-		cursor: pointer;
-		transition: transform 0.3s ease;
-	}
-
-	.clickable-image:hover {
-		transform: scale(1.1);
 	}
 </style>
