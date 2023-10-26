@@ -17,6 +17,19 @@
 
 	const size = 3;
 
+	let isGameOver = false;
+
+	function playerLoses() {
+		isGameOver = true; // ตั้งค่าให้เป็น true เมื่อผู้เล่นแพ้
+	}
+	let showSplash = true;
+	onMount(() => {
+		// เมื่อเว็บโหลดเสร็จ
+		setTimeout(() => {
+			showSplash = false;
+		}, 3000); // แสดงหน้าต้อนรับเป็นเวลา 3 วินาที
+	});
+
 	enum SpinRange {
 		NINETIES = 1,
 		ONEEIGHTIES = 2,
@@ -201,11 +214,19 @@
 		}
 	}
 
+	let score = 0;
+	function updateScore() {
+		let paintedTiles = 0;
+		paintedTiles += 10;
+		score += paintedTiles;
+	}
+
 	startNewGrid();
 	spinIt();
 	$: {
 		playerGrid;
 		if (checkMatching()) {
+			updateScore(); // Update the score
 			gridsCount++;
 			increaseTime();
 			startNewGrid();
@@ -257,35 +278,59 @@
 	}, 1);
 </script>
 
-<div class="barcontainer">
-	<div class={energyBarClass} style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
-</div>
-<div class="gamecontainer">
-	<div class="game-content">
-		<div>
-			<GameGrid
-				bind:grid={playerGrid}
-				rotation={playerRotation}
-				noninteractive={countdownNum != 0 || gameOver}
-				{stopPointerHold}
-				--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
-			/>
-		</div>
+{#if showSplash}
+	<div class="splash-screen">
+		<h1 class="content-center">{countdownNum}</h1>
 	</div>
+{:else}
+	{#if !gameOver}
+		<div class="barcontainer">
+			<div class={energyBarClass} style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
+		</div>
+		<div class="gamecontainer">
+		<div class="game-content">
+			<div>
+				<GameGrid
+					bind:grid={playerGrid}
+					rotation={playerRotation}
+					noninteractive={countdownNum != 0 || gameOver}
+					{stopPointerHold}
+					--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
+				/>
+			</div>
+		</div>
 
-	<div class="game-target">
-		<div>
-			<p>target</p>
-			<GameGrid
-				bind:grid={targetGrid}
-				rotation={targetRotation}
-				noninteractive
-				small
-				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
-			/>
+		<div class="game-target">
+			<div>
+				<p>target</p>
+				<GameGrid
+					bind:grid={targetGrid}
+					rotation={targetRotation}
+					noninteractive
+					small
+					--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+				/>
+			</div>
 		</div>
 	</div>
-</div>
+	{/if}
+	{#if gameOver}
+		<div class="splash-screen">
+			<div class="content-center">
+				<p>
+					game over
+				</p>
+				<p>
+					score : {score}
+				</p>
+				<div>
+					<a href="javascript:location.reload(true);">🎃 restart 🦇</a>
+					<a href="./">🎃 back 🦇</a>
+				</div>
+			</div>
+		</div>
+	{/if}
+{/if}
 
 <style>
 	div.gamecontainer {
@@ -353,5 +398,57 @@
 		transition: width 0.1s;
 		box-shadow: 0 0 10px var(--base-black);
 		border-radius: 25px;
+	}
+
+	.splash-screen {
+		background-image: url('http://localhost:5173/game');
+		background-size: cover;
+		height: 100vh;
+		width: 100%;
+		font-size: 125px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		backdrop-filter: blur(10px); /* เอฟเฟกต์เบลอ */
+	}
+
+	.fon {
+		font-size: 15px;
+		font-weight: 600;
+		font-family: myFirstFont;
+	}
+
+	a {
+		text-decoration: none;
+		color: #fff;
+		background: var(--base-black);
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		padding-left: 24px;
+		padding-right: 24px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		border-radius: 980px;
+	}
+	.content-center{
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-family: myFirstFont;
+		gap: 16px
+	}
+
+	.content-center p {
+		text-decoration: none;
+		color: #090505;
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		border-radius: 980px;
+		margin-top: 0%;
+		margin-bottom: 0%
 	}
 </style>
