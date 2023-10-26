@@ -10,6 +10,7 @@
 ## Developing
 
 - clone this repository
+- run `npm i`
 - copy `dev-docker-compose.yaml` to `docker-compose.yaml`
 - copy `dev.env` to `.env`
 - edit variables inside `docker-compose.yaml` and `.env`
