@@ -16,8 +16,8 @@
 </script>
 
 <div class="menu-icon">
-	{#if data.displayName}
-		<a href="./profile">{data.displayName}</a>
+	{#if data.loginInfo}
+		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
 	{/if}
 </div>
 <div class="widget-header">
