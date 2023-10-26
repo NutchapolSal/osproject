@@ -29,7 +29,6 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 export const actions = {
 	default: async ({ request, locals, params }) => {
-		await new Promise((r) => setTimeout(r, 1000));
 		const session = await locals.auth.validate();
 		if (!session || params.id !== session.user.userId) {
 			return fail(401, { error: 'unauthorized' });
