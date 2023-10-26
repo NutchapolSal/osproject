@@ -4,6 +4,13 @@
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
+	import { gameModeStore } from '../stores.js';
+
+	let selectedMode;
+
+	$: {
+		selectedMode = $gameModeStore.find((mode) => mode.active);
+	}
 
 	export let data;
 	const gameSeed = data.gameSeed;

@@ -2,9 +2,16 @@
 	import settingImage from '$lib/images/settings.png';
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
+	import { gameModeStore } from './stores.js';
 
-	const gameMode = ['Normal', 'Memory'];
-	let selected = gameMode[0];
+	function switchMode(name) {
+		gameModeStore.update((modes) => {
+			return modes.map((mode) => ({
+				...mode,
+				active: mode.name === name
+			}));
+		});
+	}
 
 	let showSpeakerImage = true;
 	let imageSource = speakerImageOn;
@@ -25,12 +32,12 @@
 </div>
 <a href="./game">🎃 Start 🦇</a>
 <div class="menu-group">
-	{#each gameMode as mode}
+	{#each $gameModeStore as mode (mode.name)}
 		<button
-			aria-current={selected === mode}
-			aria-label={mode}
-			on:click={() => (selected = mode)}
-			class="menu-mode">{mode}</button
+			aria-current={mode.active}
+			aria-label={mode.name}
+			on:click={() => switchMode(mode.name)}
+			class="menu-mode">{mode.name}</button
 		>
 	{/each}
 </div>
