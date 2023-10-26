@@ -1,18 +1,8 @@
 <script lang="ts">
-	import settingImage from '$lib/images/settings.png';
-	import speakerImageOn from '$lib/images/sound-on.png';
-	import speakerImageOff from '$lib/images/sound-off.png';
 	import { GameModes, gameModeStore } from './gameModes';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	let showSpeakerImage = true;
-	let imageSource = speakerImageOn;
-	function toggleImage() {
-		showSpeakerImage = !showSpeakerImage;
-		imageSource = showSpeakerImage ? speakerImageOn : speakerImageOff;
-	}
 </script>
 
 <div class="menu-icon">
@@ -112,16 +102,5 @@
 		/* box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.2); */
 		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
 		border: var(--base-orange) 2px solid;
-	}
-
-	.clickable-image {
-		background: none;
-		border: none;
-		cursor: pointer;
-		transition: transform 0.3s ease;
-	}
-
-	.clickable-image:hover {
-		transform: scale(1.1);
 	}
 </style>
