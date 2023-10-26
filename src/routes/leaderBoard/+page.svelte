@@ -4,8 +4,8 @@
 	let players = data.scores;
 	const sortedPlayers = players;
 
-	function getPlayerRank(player) {
-		return sortedPlayers.findIndex(p => p === player) + 1;
+	function getPlayerRank(player: (typeof players)[number]) {
+		return sortedPlayers.findIndex((p) => p === player) + 1;
 	}
 </script>
 
@@ -17,47 +17,73 @@
 	<div class="podium-player second-place">
 		<div class="bar">
 			{#if players.length >= 2}
-				<div class="truncate" style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[1].displayName}</div>
+				<div
+					class="truncate"
+					style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;"
+				>
+					{sortedPlayers[1].displayName}
+				</div>
 				<div>🥈</div>
 			{/if}
 		</div>
 		{#if players.length >= 2}
-			<div style="align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[1].score} points</div>
+			<div style="align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;">
+				{sortedPlayers[1].score} points
+			</div>
 		{/if}
 	</div>
 	<div class="podium-player first-place">
 		<div class="bar">
 			{#if players.length >= 1}
-				<div class="truncate" style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[0].displayName}</div>
+				<div
+					class="truncate"
+					style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;"
+				>
+					{sortedPlayers[0].displayName}
+				</div>
 				<div>🥇</div>
 			{/if}
 		</div>
 		{#if players.length >= 1}
-			<div style="height: 100%; align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[0].score} points</div>
+			<div
+				style="height: 100%; align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;"
+			>
+				{sortedPlayers[0].score} points
+			</div>
 		{/if}
 	</div>
 	<div class="podium-player third-place">
 		<div class="bar">
 			{#if players.length >= 3}
-				<div class="truncate" style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[2].displayName}</div>
+				<div
+					class="truncate"
+					style="display: block; width: 175px; color:white; -webkit-text-stroke: 0.1px black;"
+				>
+					{sortedPlayers[2].displayName}
+				</div>
 				<div>🥉</div>
 			{/if}
 		</div>
 		{#if players.length >= 3}
-			<div style="align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;">{sortedPlayers[2].score} points</div>
+			<div style="align-self: flex-end; color:white; -webkit-text-stroke: 0.1px black;">
+				{sortedPlayers[2].score} points
+			</div>
 		{/if}
 	</div>
 </div>
 
 <div class="boardcontainer">
 	<ul class="ranking">
-		{#each sortedPlayers.slice(3) as player (player.displayName)}
+		{#each sortedPlayers.slice(3) as player}
 			<li>{getPlayerRank(player)}</li>
 		{/each}
 	</ul>
 	<ul class="player">
-		{#each sortedPlayers.slice(3) as player (player.displayName)}
-			<li><div class="truncate">{player.displayName}</div> : {player.score} points</li>
+		{#each sortedPlayers.slice(3) as player}
+			<li>
+				<div class="truncate">{player.displayName}</div>
+				: {player.score} points
+			</li>
 		{/each}
 	</ul>
 </div>
@@ -119,7 +145,7 @@
 		background: silver;
 		height: 100%;
 	}
-	
+
 	.third-place {
 		flex: 1;
 		align-self: flex-end;
@@ -189,5 +215,4 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-
 </style>
