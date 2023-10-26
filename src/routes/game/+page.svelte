@@ -10,6 +10,19 @@
 
 	const size = 3;
 
+	let isGameOver = false;
+
+	function playerLoses() {
+		isGameOver = true; // ตั้งค่าให้เป็น true เมื่อผู้เล่นแพ้
+	}
+	let showSplash = true;
+	onMount(() => {
+		// เมื่อเว็บโหลดเสร็จ
+		setTimeout(() => {
+			showSplash = false;
+		}, 3000); // แสดงหน้าต้อนรับเป็นเวลา 3 วินาที
+	});
+
 	enum SpinRange {
 		NINETIES = 1,
 		ONEEIGHTIES = 2,
@@ -194,11 +207,26 @@
 		}
 	}
 
+	let score = 0;
+	function updateScore() {
+		let paintedTiles = 0;
+		paintedTiles += 10;
+		// for (let y = 0; y < size; y++) {
+		//     for (let x = 0; x < size; x++) {
+		//         if (playerGrid[y][x]) {
+		//             paintedTiles++;
+		//         }
+		//     }
+		// }
+		score += paintedTiles;
+	}
+
 	startNewGrid();
 	spinIt();
 	$: {
 		playerGrid;
 		if (checkMatching()) {
+			updateScore(); // Update the score
 			gridsCount++;
 			increaseTime();
 			startNewGrid();
@@ -241,50 +269,129 @@
 	});
 </script>
 
-<h1>epic gamo</h1>
-<h2>{countdownNum}</h2>
-<h2>{Math.floor(remainTime)}</h2>
-<div class="gamecontainer">
-	<div>
-		<GameGrid
-			bind:grid={playerGrid}
-			rotation={playerRotation}
-			noninteractive={countdownNum != 0 || gameOver}
-			{stopPointerHold}
-			--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
-		/>
+{#if showSplash}
+	<div class="splash-screen">
+		<h1 class="content-center">{countdownNum}</h1>
 	</div>
-
-	<div>
-		<div>
-			<p>target</p>
-			<GameGrid
-				bind:grid={targetGrid}
-				rotation={targetRotation}
-				noninteractive
-				small
-				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
-			/>
+{:else}
+	<!-- เนื้อหาหลักของเว็บ -->
+	{#if !gameOver}
+		<div class="fon">
+			<h1>epic gamo</h1>
+			<h2>Score: {score} M</h2>
+			<h2>{Math.floor(remainTime)}</h2>
 		</div>
-	</div>
-</div>
+		<div class="gamecontainer">
+			<div>
+				<GameGrid
+					bind:grid={playerGrid}
+					rotation={playerRotation}
+					noninteractive={countdownNum != 0 || gameOver}
+					{stopPointerHold}
+					--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
+				/>
+			</div>
 
-<button on:click={devcheat}>dev cheat</button>
+			<div>
+				<div>
+					<p>target</p>
+					<GameGrid
+						bind:grid={targetGrid}
+						rotation={targetRotation}
+						noninteractive
+						small
+						--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+					/>
+				</div>
+			</div>
+		</div>
 
-<p>
-	gameseed: <code>{gameSeed}</code>
-	<br />
-	<code>{currentSpinSetupI}</code>
-	<br />
-	<code>{JSON.stringify(diffSetups[currentSpinSetupI])}</code>
-</p>
+		<button on:click={devcheat}>dev cheat</button>
 
-<p>grid no. {gridsCount}</p>
+		<p>
+			gameseed: <code>{gameSeed}</code>
+			<br />
+			<code>{currentSpinSetupI}</code>
+			<br />
+			<code>{JSON.stringify(diffSetups[currentSpinSetupI])}</code>
+		</p>
+
+		<p>grid no. {gridsCount}</p>
+	{/if}
+	{#if gameOver}
+		<div class="splash-screen">
+			<div class="content-center">
+				<p>
+					game over
+				</p>
+				<p>
+					score : {score}
+				</p>
+				<div>
+					<a href="javascript:location.reload(true);">🎃 restart 🦇</a>
+					<a href="./">🎃 back 🦇</a>
+				</div>
+			</div>
+		</div>
+	{/if}
+{/if}
 
 <style>
 	div.gamecontainer {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
+	}
+
+	.splash-screen {
+		background-image: url('http://localhost:5173/game');
+		background-size: cover;
+		height: 100vh;
+		width: 100%;
+		font-size: 125px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		backdrop-filter: blur(10px); /* เอฟเฟกต์เบลอ */
+	}
+
+	.fon {
+		font-size: 15px;
+		font-weight: 600;
+		font-family: myFirstFont;
+	}
+
+	a {
+		text-decoration: none;
+		color: #fff;
+		background: var(--base-black);
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		padding-left: 24px;
+		padding-right: 24px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		border-radius: 980px;
+	}
+	.content-center{
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-family: myFirstFont;
+		gap: 16px
+	}
+
+	.content-center p {
+		text-decoration: none;
+		color: #090505;
+		font-size: 50px;
+		font-weight: 600;
+		font-family: myFirstFont;
+		border-radius: 980px;
+		margin-top: 0%;
+		margin-bottom: 0%
 	}
 </style>

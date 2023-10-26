@@ -3,6 +3,8 @@
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
 
+
+
 	const gameMode = ['Normal', 'Memory'];
 	let selected = gameMode[0];
 
@@ -119,4 +121,5 @@
 	.clickable-image:hover {
 		transform: scale(1.1);
 	}
+
 </style>
