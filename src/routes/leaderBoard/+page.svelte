@@ -1,36 +1,35 @@
 <script>
-	
+	let players = [
+    { name: 'Player 1', score: 10 },
+    { name: 'Player 2', score: 50 },
+    { name: 'Player 3', score: 80 },
+    { name: 'Player 4', score: 30 },
+    { name: 'Player 5', score: 60 }
+  ];
+
+  const sortedPlayers = players.slice().sort((a, b) => b.score - a.score);
+
+  $: topPlayers = players.slice(0, 3);
+
+  function getPlayerRank(player) {
+    return sortedPlayers.findIndex(p => p === player) + 1;
+  }
 </script>
 
 
 <div class="header">
 	<h1>🎃 Leaderboard 🎃</h1>
 </div>
-<!-- <div class="top-player">
-	<div class="rank1">
-
-	</div>
-	<div class="rank2">
-
-	</div>
-	<div class="rank3">
-
-	</div>
-</div> -->
 <div class="boardcontainer">
 	<ul class="ranking">
-		<li>1</li>
-		<li>2</li>
-		<li>3</li>
-		<li>4</li>
-		<li>5</li>
+		{#each sortedPlayers as player (player.name)}
+			<li>{getPlayerRank(player)}</li>
+		{/each}
 	</ul>
 	<ul class="player">
-		<li>player1 999</li>
-		<li>player2 999</li>
-		<li>player3 999</li>
-		<li>player4 999</li>
-		<li>player5 999</li>
+		{#each sortedPlayers as player (player.name)}
+			<li>{player.name} : {player.score} points</li>
+		{/each}
 	</ul>
 </div>
 
@@ -49,16 +48,13 @@
 	}
 	div.boardcontainer {
 		margin: auto;
-		/* width: 50%; */
 		display: flex;
-		/* justify-content: space-around; */
 		align-items: center;
-		/* gap: 5%; */
 	}
 	.boardcontainer li {
 		list-style-type: none;
 		font-family: myFirstFont;
-		font-size: 50px;
+		font-size: 40px;
 		font-weight: 1000;
 		color: var(--base-black);
 		text-shadow: 0px 0px 10px var(--base-orange);
@@ -68,7 +64,6 @@
 	}
 	ul.ranking {
 		padding-inline-start: 0px;
-		/* width: 100%; */
 	}
 	ul.ranking li {
 		width: 150%;
