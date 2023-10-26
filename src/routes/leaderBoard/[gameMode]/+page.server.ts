@@ -8,5 +8,5 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (gameMode == null) {
 		throw error(404, 'unknown game mode');
 	}
-	return { scores: await getLeaderboards(gameMode) };
+	return { scores: await getLeaderboards(gameMode), gameMode: gameMode };
 };
