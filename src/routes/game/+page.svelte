@@ -11,7 +11,7 @@
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
-	const startRemainTime = 60000;
+	const startRemainTime = 6000;
 
 	enum SpinRange {
 		NINETIES = 1,
