@@ -1,5 +1,6 @@
 import { auth, getGoogleAuth } from '$lib/server/lucia';
 import { OAuthRequestError } from '@lucia-auth/oauth';
+import type { User } from 'lucia';
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('google_oauth_state');
@@ -11,18 +12,18 @@ export const GET = async ({ url, cookies, locals }) => {
 	}
 	try {
 		const res = await getGoogleAuth(url.origin).validateCallback(code);
-		const getUser = async () => {
+		const getUser = async (): Promise<[User, boolean]> => {
 			const existingUser = await res.getExistingUser();
 			if (existingUser) {
-				return existingUser;
+				return [existingUser, false];
 			}
 			const user = await res.createUser({
 				attributes: { display_name: res.googleUser.name, shadowbanned: false }
 			});
-			return user;
+			return [user, true];
 		};
 
-		const user = await getUser();
+		const [user, newUser] = await getUser();
 		const session = await auth.createSession({
 			userId: user.userId,
 			attributes: {}
@@ -31,7 +32,7 @@ export const GET = async ({ url, cookies, locals }) => {
 		return new Response(null, {
 			status: 302,
 			headers: {
-				Location: '/'
+				Location: newUser ? `/user/${user.userId}` : '/'
 			}
 		});
 	} catch (e) {

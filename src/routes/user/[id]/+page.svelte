@@ -3,7 +3,7 @@
 
 	export let data;
 	export let form;
-	let editAuthorized = data.loginInfo?.editAuthorized ?? false;
+	let isSelf = data.loginInfo?.isSelf ?? false;
 	let editing = false;
 	let waiting = false;
 </script>
@@ -26,10 +26,11 @@
 	}}
 >
 	<h1 class:hide={editing}>Name : {data.shownUser.displayName}</h1>
-	{#if editAuthorized}
+	{#if isSelf}
 		<button type="button" on:click={() => (editing = true)} class:hide={editing}> edit </button>
 		<input
 			type="text"
+			formaction="?/editName"
 			name="displayName"
 			value={data.shownUser.displayName}
 			required
@@ -41,6 +42,7 @@
 		<button type="submit" disabled={waiting} class:hide={!editing}>
 			{waiting ? 'saving...' : 'save'}
 		</button>
+		<button type="submit" formaction="?/logout">log out</button>
 	{/if}
 </form>
 <div class="profile-menu">

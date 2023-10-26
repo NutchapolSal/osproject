@@ -1,8 +1,9 @@
 import { getScoresFromUserId, getUserFromId, updateDisplayName } from '$lib/server/db';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { checkNullOrFile } from '$lib/checkNullOrFile';
 import postgres from 'postgres';
+import { auth } from '$lib/server/lucia';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const [session, gotUser, scores] = await Promise.all([
@@ -22,13 +23,13 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 				: {
 						displayName: session.user.displayName,
 						userId: session.user.userId,
-						editAuthorized: session.user.userId === params.id
+						isSelf: session.user.userId === params.id
 				  }
 	};
 };
 
 export const actions = {
-	default: async ({ request, locals, params }) => {
+	editName: async ({ request, locals, params }) => {
 		const session = await locals.auth.validate();
 		if (!session || params.id !== session.user.userId) {
 			return fail(401, { error: 'unauthorized' });
@@ -49,5 +50,13 @@ export const actions = {
 				return fail(400, { error: 'bad request' });
 			}
 		}
+	},
+
+	logout: async ({ locals }) => {
+		const session = await locals.auth.validate();
+		if (!session) return fail(401);
+		await auth.invalidateSession(session.sessionId); // invalidate session
+		locals.auth.setSession(null); // remove cookie
+		throw redirect(302, '/');
 	}
 };
