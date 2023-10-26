@@ -67,4 +67,62 @@ export async function createNewScore(v: {
     `;
 }
 
+export async function getUserFromId(id: string) {
+	const user = (await sql`SELECT * FROM auth_user WHERE id = ${id}`)[0];
+	if (user == null) {
+		return null;
+	}
+	return {
+		id: user.id,
+		displayName: user.display_name
+	};
+}
+
+export async function getScoresFromUserId(id: string) {
+	const results: {
+		score: number;
+		gameMode: string;
+		timeStart: Date;
+	}[] = [];
+	await sql`
+	SELECT score.score, score.game_mode, score.time_start FROM score
+	WHERE score.user_id = ${id}
+	ORDER BY score DESC
+	LIMIT 10
+	`.forEach((score) => {
+		results.push({
+			score: score.score,
+			gameMode: score.game_mode,
+			timeStart: score.time_start
+		});
+	});
+
+	return results;
+}
+
+export async function getLeaderboards() {
+	const results: {
+		score: number;
+		gameMode: string;
+		timeStart: Date;
+		userId: string;
+		displayName: string;
+	}[] = [];
+	await sql`
+	SELECT score.score, score.game_mode, score.time_start, score.user_id, auth_user.display_name FROM score
+	INNER JOIN auth_user ON score.user_id = auth_user.id
+	ORDER BY score DESC
+	`.forEach((score) => {
+		results.push({
+			score: score.score,
+			gameMode: score.game_mode,
+			timeStart: score.time_start,
+			userId: score.user_id,
+			displayName: score.display_name
+		});
+	});
+
+	return results;
+}
+
 export default sql;
