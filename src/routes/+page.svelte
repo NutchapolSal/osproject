@@ -16,10 +16,6 @@
 </script>
 
 <div class="menu-icon">
-	<img src={settingImage} alt="settings" width="45px" height="45px" />
-	<button on:click={toggleImage} class="clickable-image">
-		<img src={imageSource} alt="settings" width="45px" height="45px" />
-	</button>
 	{#if data.displayName}
 		<a href="./profile">{data.displayName}</a>
 	{/if}
@@ -46,7 +42,7 @@
 		width: 100%;
 		display: flex;
 		font-family: myFirstFont;
-		font-size: 150px;
+		font-size: 22vmin;
 		margin-top: 0%;
 		margin-bottom: 0%;
 		color: var(--base-orange);
@@ -78,30 +74,30 @@
 	.menu-mode {
 		border-radius: 980px;
 		font-family: myFirstFont;
-		font-size: 50px;
+		font-size: 7.2vmin;
 		font-weight: 600;
 		background: var(--base-black);
 		color: #fff;
 		transform: translate(-2px, -2px);
 		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
 		transition: all 0.1s;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 	}
 
 	a {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
-		font-size: 50px;
+		font-size: 7.2vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 		border-radius: 980px;
 	}
 
