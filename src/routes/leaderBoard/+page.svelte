@@ -1,21 +1,12 @@
 <script lang="ts">
 	export let data;
 
-// 	let players = [
-//     { name: 'Player 1', score: 1110 },
-//     { name: 'Player 2', score: 5110 },
-//     { name: 'Player 3', score: 8110 },
-//     { name: 'Player 4', score: 3110 },
-//     { name: 'Player 5', score: 6110 }
-//   ];
-//   const sortedPlayers = players.slice().sort((a, b) => b.score - a.score);
+	let players = data.scores;
+	const sortedPlayers = players;
 
-  let players = data.scores;
-  const sortedPlayers = players;
-
-  function getPlayerRank(player) {
-    return sortedPlayers.findIndex(p => p === player) + 1;
-  }
+	function getPlayerRank(player) {
+		return sortedPlayers.findIndex(p => p === player) + 1;
+	}
 </script>
 
 <div class="header">
