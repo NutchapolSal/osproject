@@ -11,6 +11,7 @@
 
 <div class="header">
 	<h1>🎃 Leaderboard 🎃</h1>
+	<h2>{data.gameMode}</h2>
 </div>
 
 <div class="podium">
@@ -89,12 +90,27 @@
 </div>
 
 <style>
+	div.header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 	.header h1 {
 		width: 100%;
-		display: flex;
 		font-family: myFirstFont;
 		font-size: 80px;
 		margin-top: 10%;
+		margin-bottom: 0%;
+		color: var(--base-black);
+		text-align: center;
+		line-height: 1;
+		text-shadow: 0px 0px 10px var(--base-black);
+	}
+	.header h2 {
+		width: 100%;
+		font-family: myFirstFont;
+		font-size: 40px;
+		margin-top: 0%;
 		margin-bottom: 0%;
 		color: var(--base-black);
 		text-align: center;

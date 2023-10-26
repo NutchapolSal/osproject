@@ -9,6 +9,7 @@
 	export let small: boolean = false;
 	export let corner: boolean = false;
 	export let stopPointerHold: number = 0;
+	export let blanked: boolean = false;
 	$: {
 		stopPointerHold;
 		stophold = true;
@@ -38,9 +39,10 @@
 		class:stateOn={state}
 		class:corner
 		class:small
+		class:blanked
 	/>
 {:else}
-	<div class="gamesquare" class:corner class:small class:stateOn={state} />
+	<div class="gamesquare" class:corner class:small class:stateOn={state} class:blanked />
 {/if}
 
 <style>
@@ -71,7 +73,6 @@
 		filter: grayscale(0%) drop-shadow(0px 0px 5px var(--base-black));
 	}
 	.gamesquare.corner {
-		position: relative;
 		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%),
 			url('$lib/images/candy-grey.png');
 		filter: grayscale(0%) drop-shadow(0px 0px 5px var(--base-black));
@@ -82,6 +83,14 @@
 	.gamesquare.corner.stateOn {
 		background: linear-gradient(to bottom right, #ffff00 20%, #ffff0000 20%),
 			url('$lib/images/candy.png');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
+	}
+	.gamesquare.blanked,
+	.gamesquare.blanked.corner {
+		background: url('$lib/images/candy-grey.png');
+		filter: grayscale(0%) brightness(1.8) drop-shadow(0px 0px 5px var(--base-black));
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;

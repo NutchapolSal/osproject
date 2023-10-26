@@ -2,7 +2,7 @@
 	import { seededSfc32 } from '$lib/rng';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
-	import { gameModeStore } from '../gameModes';
+	import { GameModes, gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { enhance } from '$app/forms';
@@ -12,6 +12,8 @@
 
 	const size = 3;
 	const startRemainTime = 60000;
+	const memoryMode = $gameModeStore == GameModes.Memory;
+	const memoryModeTime = 3000;
 
 	enum SpinRange {
 		NINETIES = 1,
@@ -145,6 +147,8 @@
 	for (let i = 0; i < 100; i++) {
 		spinRand();
 	}
+	let blanked = memoryMode;
+	let blankTimer = setTimeout(() => {}, 0);
 
 	function startNewGrid() {
 		for (let y = 0; y < size; y++) {
@@ -216,6 +220,9 @@
 			startNewGrid();
 			stopPointerHold++;
 			spinIt();
+			if (memoryMode) {
+				unblank();
+			}
 		}
 	}
 
@@ -229,6 +236,14 @@
 
 	function increaseTime() {
 		deathTime += diffSetups[currentSpinSetupI].recovery;
+	}
+
+	function unblank() {
+		blanked = false;
+		clearTimeout(blankTimer);
+		blankTimer = setTimeout(() => {
+			blanked = true;
+		}, memoryModeTime);
 	}
 
 	function startTheTime() {
@@ -248,6 +263,9 @@
 		const countdownInterval = setInterval(() => {
 			countdownNum--;
 			if (countdownNum <= 0) {
+				if (memoryMode) {
+					unblank();
+				}
 				startTheTime();
 				clearInterval(countdownInterval);
 			}
@@ -272,6 +290,7 @@
 				noninteractive
 				small
 				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+				{blanked}
 			/>
 		</div>
 	</div>
@@ -311,7 +330,7 @@
 						>
 							<input type="hidden" name="score" value={score} />
 							<input type="hidden" name="gameSeed" value={gameSeed} />
-							<input type="hidden" name="gameMode" value={'normal'} />
+							<input type="hidden" name="gameMode" value={$gameModeStore} />
 							<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
 							<input type="hidden" name="gameDuration" value={deathTime - startTime} />
 							<input type="hidden" name="gameVersion" value={'asd'} />
