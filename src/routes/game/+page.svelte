@@ -2,15 +2,10 @@
 	import { seededSfc32 } from '$lib/rng';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
-	import { gameModeStore } from '../stores.js';
+	import { gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 
-	let selectedMode;
-
-	$: {
-		selectedMode = $gameModeStore.find((mode) => mode.active);
-	}
 
 	export let data;
 	const gameSeed = data.gameSeed;

@@ -2,16 +2,7 @@
 	import settingImage from '$lib/images/settings.png';
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
-	import { gameModeStore } from './stores.js';
-
-	function switchMode(name) {
-		gameModeStore.update((modes) => {
-			return modes.map((mode) => ({
-				...mode,
-				active: mode.name === name
-			}));
-		});
-	}
+	import { GameModes, gameModeStore } from './gameModes';
 
 	let showSpeakerImage = true;
 	let imageSource = speakerImageOn;
@@ -32,12 +23,12 @@
 </div>
 <a href="./game">🎃 Start 🦇</a>
 <div class="menu-group">
-	{#each $gameModeStore as mode (mode.name)}
+	{#each Object.values(GameModes) as mode}
 		<button
-			aria-current={mode.active}
-			aria-label={mode.name}
-			on:click={() => switchMode(mode.name)}
-			class="menu-mode">{mode.name}</button
+			aria-current={$gameModeStore == mode}
+			aria-label={mode}
+			on:click={() => ($gameModeStore = mode)}
+			class="menu-mode">{mode}</button
 		>
 	{/each}
 </div>
@@ -126,5 +117,4 @@
 	.clickable-image:hover {
 		transform: scale(1.1);
 	}
-
 </style>
