@@ -309,7 +309,7 @@
 								};
 							}}
 						>
-							<input type="hidden" name="score" value={gridsCount - 1} />
+							<input type="hidden" name="score" value={score} />
 							<input type="hidden" name="gameSeed" value={gameSeed} />
 							<input type="hidden" name="gameMode" value={'normal'} />
 							<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
