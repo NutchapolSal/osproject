@@ -240,16 +240,14 @@
 		}, 1000);
 	});
 
-	let timerInterval = setInterval(updateTimer, 100);
 	let energyBarClass = '';
-
-	function updateTimer() {
+	let myInterval = setInterval(function updateEnergyBar() {
 		if (remainTime / 600 <= 30) {
 			energyBarClass = 'energy-bar-low';
 		} else {
 			energyBarClass = 'energy-bar';
 		}
-	}
+	}, 1);
 </script>
 
 <div class="barcontainer">
