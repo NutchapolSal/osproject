@@ -444,10 +444,10 @@
 		font-size: 6vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
-		padding-left: 24px;
-		padding-right: 24px;
-		padding-top: 16px;
-		padding-bottom: 16px;
+		padding-left: 3.4vmin;
+		padding-right: 3.4vmin;
+		padding-top: 1.2vmin;
+		padding-bottom: 1.2vmin;
 		border-radius: 980px;
 		white-space: nowrap;
 	}
