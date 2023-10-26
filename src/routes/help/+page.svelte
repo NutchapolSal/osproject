@@ -1,3 +1,25 @@
+<script lang="ts">
+	import { onMount } from "svelte";
+	import GameGrid from "../game/GameGrid.svelte";
+
+	const grid = [
+		[false, false, false], 
+		[false, false, false], 
+		[false, false, false], 
+	]
+
+	let rotation = 0
+
+	onMount(() => {
+		const rotateTimer = setTimeout(() => {
+			rotation += Math.random() < 0.5 ? 1 : -1
+		}, 5000)
+
+		return () => {
+			clearInterval(rotateTimer)
+		}
+	})
+</script>
 <div class="widget-header">
 	<h1>How To Play</h1>
 </div>
@@ -6,19 +28,10 @@
 	<p1>เกมจะมีโจทย์เป้าหมาย (target) ซึ่งเป็น pattern ที่เราจะต้องกดตาม</p1>
 	<p1>โดยเกมจะมีสัญลักษ์สีเหลืองที่มุมซ้ายบน เพื่อเป็นจุดสังเกตให้กดตาม</p1>
 	<p1>ทุกครั้งที่ผ่านหลอดเวลาจะเพิ่มขึ้น เกมจะจบเมื่อเวลาหมด</p1>
+	
 </div>
+<GameGrid {grid} {rotation}/>
 
-<div class="row">
-	<div class="column">
-		<img src="src\lib\images\target.png" alt="Target" />
-	</div>
-	<div class="column">
-		<img src="src\lib\images\problem.png" alt="Problem" />
-	</div>
-	<div class="column">
-		<img src="src\lib\images\Cntdown.png" alt="Time" />
-	</div>
-</div>
 <style>
 	.how-to-play-menu {
 		border-radius: 25px;
@@ -49,16 +62,5 @@
 		line-height: 1;
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
-	.row {
-		display: flex;
-	}
-
-	.column {
-		flex: 33.33%;
-		padding: 5px;
-	}
-	img {
-		border: 10px solid var(--base-black);
-		border-radius: 5px;
-	}
+	
 </style>
