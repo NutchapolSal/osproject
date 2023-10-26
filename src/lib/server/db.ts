@@ -1,6 +1,7 @@
 import postgres from 'postgres';
 import { env } from '$env/dynamic/private';
 import { building } from '$app/environment';
+import type { GameModes } from '../../routes/gameModes';
 
 const sql = postgres({
 	host: env.POSTGRES_HOSTNAME,
@@ -100,7 +101,7 @@ export async function getScoresFromUserId(id: string) {
 	return results;
 }
 
-export async function getLeaderboards() {
+export async function getLeaderboards(gameMode: GameModes) {
 	const results: {
 		score: number;
 		gameMode: string;
@@ -111,6 +112,7 @@ export async function getLeaderboards() {
 	await sql`
 	SELECT score.score, score.game_mode, score.time_start, score.user_id, auth_user.display_name FROM score
 	INNER JOIN auth_user ON score.user_id = auth_user.id
+	WHERE score.game_mode = ${gameMode}
 	ORDER BY score DESC
 	`.forEach((score) => {
 		results.push({
