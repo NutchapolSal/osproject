@@ -1,10 +1,10 @@
 <script lang="ts">
-	import GameSquare from './GameSquare.svelte';
 	import { seededSfc32 } from '$lib/rng';
-	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
 	import { gameModeStore } from '../stores.js';
+	import { fade } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 
 	let selectedMode;
 
@@ -16,19 +16,7 @@
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
-
-	let isGameOver = false;
-
-	function playerLoses() {
-		isGameOver = true; // ตั้งค่าให้เป็น true เมื่อผู้เล่นแพ้
-	}
-	let showSplash = true;
-	onMount(() => {
-		// เมื่อเว็บโหลดเสร็จ
-		setTimeout(() => {
-			showSplash = false;
-		}, 3000); // แสดงหน้าต้อนรับเป็นเวลา 3 วินาที
-	});
+	const startRemainTime = 5000;
 
 	enum SpinRange {
 		NINETIES = 1,
@@ -214,19 +202,13 @@
 		}
 	}
 
-	let score = 0;
-	function updateScore() {
-		let paintedTiles = 0;
-		paintedTiles += 10;
-		score += paintedTiles;
-	}
+	$: score = (gridsCount - 1) * 10;
 
 	startNewGrid();
 	spinIt();
 	$: {
 		playerGrid;
 		if (checkMatching()) {
-			updateScore(); // Update the score
 			gridsCount++;
 			increaseTime();
 			startNewGrid();
@@ -241,6 +223,7 @@
 	let deathTime: number = 0;
 	$: remainTime = deathTime - nowTime;
 	$: gameOver = remainTime < 0;
+	$: timeBarFrac = remainTime / startRemainTime;
 
 	function increaseTime() {
 		deathTime += diffSetups[currentSpinSetupI].recovery;
@@ -249,7 +232,7 @@
 	function startTheTime() {
 		startTime = performance.now();
 		nowTime = startTime;
-		deathTime = startTime + 60000;
+		deathTime = startTime + startRemainTime;
 		requestAnimationFrame(updateNowTime);
 	}
 	function updateNowTime() {
@@ -267,116 +250,102 @@
 			}
 		}, 1000);
 	});
-
-	let energyBarClass = '';
-	let myInterval = setInterval(function updateEnergyBar() {
-		if (remainTime / 600 <= 30) {
-			energyBarClass = 'energy-bar-low';
-		} else {
-			energyBarClass = 'energy-bar';
-		}
-	}, 1);
 </script>
 
-{#if showSplash}
-	<div class="splash-screen">
-		<h1 class="content-center">{countdownNum}</h1>
+<div class="barcontainer">
+	<div
+		class="energy-bar"
+		class:low={timeBarFrac <= 0.3 && countdownNum == 0}
+		style="width: {countdownNum > 0 ? 100 : timeBarFrac * 100}%"
+	/>
+</div>
+<div class="gamecontainer">
+	<div class="game-content">
+		<div>
+			<p>target</p>
+			<GameGrid
+				bind:grid={targetGrid}
+				rotation={targetRotation}
+				noninteractive
+				small
+				--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
+			/>
+		</div>
 	</div>
-{:else}
-	{#if !gameOver}
-		<div class="barcontainer">
-			<div class={energyBarClass} style="width: {countdownNum > 0 ? 100 : remainTime / 600}%" />
-		</div>
-		<div class="gamecontainer">
-		<div class="game-content">
-			<div>
-				<GameGrid
-					bind:grid={playerGrid}
-					rotation={playerRotation}
-					noninteractive={countdownNum != 0 || gameOver}
-					{stopPointerHold}
-					--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
-				/>
-			</div>
-		</div>
 
-		<div class="game-target">
-			<div>
-				<p>target</p>
-				<GameGrid
-					bind:grid={targetGrid}
-					rotation={targetRotation}
-					noninteractive
-					small
-					--spinDuration={`${diffSetups[currentSpinSetupI].target?.duration ?? 0.5}s`}
-				/>
-			</div>
+	<div class="game-content">
+		<div>
+			<GameGrid
+				bind:grid={playerGrid}
+				rotation={playerRotation}
+				noninteractive={countdownNum != 0 || gameOver}
+				{stopPointerHold}
+				--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
+			/>
 		</div>
 	</div>
-	{/if}
-	{#if gameOver}
-		<div class="splash-screen">
+</div>
+
+{#if 0 < countdownNum || gameOver}
+	<div class="splash-screen" transition:fade={{ easing: cubicInOut }}>
+		{#if !gameOver}
+			<h1 class="content-center">{countdownNum}</h1>
+		{:else}
 			<div class="content-center">
-				<p>
-					game over
-				</p>
+				<p>game over</p>
 				<p>
 					score : {score}
 				</p>
-				<div>
-					<a href="javascript:location.reload(true);">🎃 restart 🦇</a>
+				<div class="gameover-menu">
+					<a href="#" on:click={() => location.reload()}>🎃 restart 🦇</a>
 					<a href="./">🎃 back 🦇</a>
 				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
+	</div>
 {/if}
 
 <style>
 	div.gamecontainer {
-		display: grid;
-		grid-template-columns: auto auto;
+		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		gap: 100px;
+		gap: 2vmin;
+		flex-direction: row-reverse;
+		flex-wrap: wrap;
 	}
 
 	div.barcontainer {
 		width: 70%;
-		height: 30px;
+		height: 4vmin;
 		background-color: #d3d3d3;
-		border-radius: 25px;
-		margin-top: 60px;
-		margin-bottom: 60px;
+		border-radius: 4vmin;
+		margin-top: 6vmin;
+		margin-bottom: 6vmin;
+	}
+
+	.energy-bar {
+		height: 4vmin;
+		background-color: var(--base-orange);
+		box-shadow: 0 0 10px var(--base-black);
+		border-radius: 4vmin;
+		transition: width 0.1s, background-color 0.25s;
 	}
 
 	.game-content {
-		width: 105%;
-		height: 100%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		background-color: var(--base-orange);
-		border: 10px solid var(--base-black);
-		border-radius: 25px;
+		border: 2vmin solid var(--base-black);
+		border-radius: 4vmin;
 		box-shadow: 0px 0px 10px var(--base-black);
-	}
-
-	.game-target {
-		width: 105%;
-		height: 80%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		background-color: var(--base-orange);
-		border: 10px solid var(--base-black);
-		border-radius: 25px;
-		box-shadow: 0px 0px 10px var(--base-black);
+		padding: 2vmin;
 	}
 
 	p {
 		font-family: myFirstFont;
-		font-size: 50px;
+		font-size: 7.5vmin;
 		font-weight: 1000;
 		color: var(--base-black);
 		text-shadow: 0px 0px 10px var(--base-orange);
@@ -385,40 +354,53 @@
 		margin-bottom: 20px;
 	}
 
-	.energy-bar {
-		height: 30px;
-		background-color: var(--base-orange);
-		box-shadow: 0 0 10px var(--base-black);
-		border-radius: 25px;
-	}
-
-	.energy-bar-low {
-		height: 30px;
+	.energy-bar.low {
 		background-color: #711308;
-		transition: width 0.1s;
-		box-shadow: 0 0 10px var(--base-black);
-		border-radius: 25px;
 	}
 
 	.splash-screen {
-		background-image: url('http://localhost:5173/game');
 		background-size: cover;
 		height: 100vh;
-		width: 100%;
+		width: 100vw;
 		font-size: 125px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		backdrop-filter: blur(10px); /* เอฟเฟกต์เบลอ */
+		backdrop-filter: blur(10px);
+		position: fixed;
+		top: 0px;
+		left: 0px;
 	}
 
-	.fon {
-		font-size: 15px;
+	.content-center {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-family: myFirstFont;
+		gap: 16px;
+	}
+
+	.content-center p {
+		color: #090505;
+		font-size: 50px;
 		font-weight: 600;
 		font-family: myFirstFont;
+		border-radius: 980px;
+		margin-top: 0%;
+		margin-bottom: 0%;
 	}
 
-	a {
+	.gameover-menu {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.5vmin;
+	}
+
+	.gameover-menu a {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
@@ -430,25 +412,6 @@
 		padding-top: 16px;
 		padding-bottom: 16px;
 		border-radius: 980px;
-	}
-	.content-center{
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		font-family: myFirstFont;
-		gap: 16px
-	}
-
-	.content-center p {
-		text-decoration: none;
-		color: #090505;
-		font-size: 50px;
-		font-weight: 600;
-		font-family: myFirstFont;
-		border-radius: 980px;
-		margin-top: 0%;
-		margin-bottom: 0%
+		white-space: nowrap;
 	}
 </style>
