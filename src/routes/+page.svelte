@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
 	import settingImage from '$lib/images/settings.png';
 	import speakerImageOn from '$lib/images/sound-on.png';
 	import speakerImageOff from '$lib/images/sound-off.png';
 	import { GameModes, gameModeStore } from './gameModes';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	let showSpeakerImage = true;
 	let imageSource = speakerImageOn;
@@ -17,6 +20,9 @@
 	<button on:click={toggleImage} class="clickable-image">
 		<img src={imageSource} alt="settings" width="45px" height="45px" />
 	</button>
+	{#if data.displayName}
+		<p>{data.displayName}</p>
+	{/if}
 </div>
 <div class="widget-header">
 	<h1>Candy Rotator</h1>

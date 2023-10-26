@@ -5,7 +5,7 @@
 	import { gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-
+	import { enhance } from '$app/forms';
 
 	export let data;
 	const gameSeed = data.gameSeed;
@@ -124,7 +124,12 @@
 
 	diffSetups.sort((a, b) => a.grid - b.grid);
 
-	console.log(diffSetups);
+	enum ScoreSubmissionState {
+		NOT_SUBMITTED,
+		SUBMITTING,
+		FAILED,
+		SUBMITTED
+	}
 
 	let playerGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
 	let targetGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
@@ -133,6 +138,8 @@
 	let gridsCount = 1;
 	let stopPointerHold = 0;
 	let currentSpinSetupI = 0;
+	let dateTimeStart: Date | null = null;
+	let scoreSubmissionState = ScoreSubmissionState.NOT_SUBMITTED;
 	let gridRand = seededSfc32(gameSeed);
 	let spinRand = seededSfc32(gameSeed);
 	for (let i = 0; i < 100; i++) {
@@ -225,6 +232,7 @@
 	}
 
 	function startTheTime() {
+		dateTimeStart = new Date();
 		startTime = performance.now();
 		nowTime = startTime;
 		deathTime = startTime + startRemainTime;
@@ -298,6 +306,40 @@
 			</div>
 		{/if}
 	</div>
+{/if}
+
+{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
+	<p>game over</p>
+	<form
+		method="POST"
+		use:enhance={() => {
+			scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
+			return async ({ update }) => {
+				await update();
+				scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+			};
+		}}
+	>
+		<input type="hidden" name="score" value={gridsCount - 1} />
+		<input type="hidden" name="gameSeed" value={gameSeed} />
+		<input type="hidden" name="gameMode" value={'normal'} />
+		<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
+		<input type="hidden" name="gameDuration" value={deathTime - startTime} />
+		<input type="hidden" name="gameVersion" value={'asd'} />
+		<button>submit score</button>
+	</form>
+{/if}
+
+{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
+	<p>💫</p>
+{/if}
+
+{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
+	<p>💢</p>
+{/if}
+
+{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
+	<p>✅</p>
 {/if}
 
 <style>
