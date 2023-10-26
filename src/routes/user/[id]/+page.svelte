@@ -30,7 +30,6 @@
 		<button type="button" on:click={() => (editing = true)} class:hide={editing}> edit </button>
 		<input
 			type="text"
-			formaction="?/editName"
 			name="displayName"
 			value={data.shownUser.displayName}
 			required
@@ -39,7 +38,7 @@
 			class:hide={!editing}
 			disabled={waiting}
 		/>
-		<button type="submit" disabled={waiting} class:hide={!editing}>
+		<button type="submit" disabled={waiting} class:hide={!editing} formaction="?/editName">
 			{waiting ? 'saving...' : 'save'}
 		</button>
 		<button type="submit" formaction="?/logout">log out</button>
