@@ -36,6 +36,7 @@
 </div>
 <a href="./leaderBoard">🧛Leader Board</a>
 <a href="./help">How to play🧟</a>
+<a href="./profile">🧟</a>
 
 <style>
 	.widget-header h1 {
