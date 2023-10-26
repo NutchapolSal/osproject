@@ -1,0 +1,18 @@
+x-postgresvars: &postgresvars
+  # make sure these matches your .env
+  POSTGRES_USER: osproject
+  POSTGRES_PASSWORD: sfbssbnioisnosdbonosdjn
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      <<: *postgresvars
+    ports:
+      - "5432:5432"
+    volumes:
+      - "osproject-dev-data:/var/lib/postgresql/data"
+
+volumes:
+  osproject-dev-data:
+    name: osproject-dev-data
