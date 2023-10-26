@@ -1,7 +1,7 @@
 x-postgresvars: &postgresvars
   # make sure these matches your .env
   POSTGRES_USER: osproject
-  POSTGRES_PASSWORD: sfbssbnioisnosdbonosdjn
+  POSTGRES_PASSWORD: sctninco9scrnocuiocsrnhw93v485
 
 services:
   postgres:
