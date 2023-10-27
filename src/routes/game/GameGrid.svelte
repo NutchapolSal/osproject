@@ -8,7 +8,7 @@
 	export let blanked: boolean = false;
 </script>
 
-<div class="spinny" style:rotate={`${0.25 * rotation}turn`}>
+<div class="spinny" style:rotate={`${0.25 * rotation}turn`} style:user-select="none">
 	{#each grid as row, y}
 		<div class="theflex">
 			{#each row as state, x}
