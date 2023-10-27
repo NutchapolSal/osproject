@@ -3,7 +3,7 @@
 	export let grid: boolean[][];
 	export let rotation: number = 0;
 	export let noninteractive: boolean = false;
-	export let stopPointerHold: number = 0;
+	export let newGrid: number = 0;
 	export let small: boolean = false;
 	export let blanked: boolean = false;
 </script>
@@ -16,7 +16,7 @@
 					bind:state
 					corner={x === 0 && y === 0}
 					{noninteractive}
-					{stopPointerHold}
+					{newGrid}
 					{small}
 					{blanked}
 				/>
