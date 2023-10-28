@@ -24,7 +24,7 @@
 		>
 	{/each}
 </div>
-<a href="./leaderBoard/{$gameModeStore}">🧛Leader Board</a>
+<a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
 <style>
