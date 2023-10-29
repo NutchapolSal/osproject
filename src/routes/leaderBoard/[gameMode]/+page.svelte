@@ -19,7 +19,9 @@
 		<div class="podium-bar">
 			{#if players.length >= 2}
 				<div class="truncate">
-					{sortedPlayers[1].displayName}<br />🥈
+					<a href="../user/{sortedPlayers[1].userId}">
+						{sortedPlayers[1].displayName}
+					</a><br />🥈
 				</div>
 			{/if}
 		</div>
@@ -33,7 +35,9 @@
 		<div class="podium-bar">
 			{#if players.length >= 1}
 				<div class="truncate">
-					{sortedPlayers[0].displayName}<br />🥇
+					<a href="../user/{sortedPlayers[0].userId}">
+						{sortedPlayers[0].displayName}
+					</a><br />🥇
 				</div>
 			{/if}
 		</div>
@@ -47,7 +51,9 @@
 		<div class="podium-bar">
 			{#if players.length >= 3}
 				<div class="truncate">
-					{sortedPlayers[2].displayName}<br />🥉
+					<a href="../user/{sortedPlayers[2].userId}">
+						{sortedPlayers[2].displayName}
+					</a><br />🥉
 				</div>
 			{/if}
 		</div>
@@ -68,9 +74,8 @@
 	<ul class="player">
 		{#each sortedPlayers.slice(3) as player}
 			<li>
-				<div class="truncate">{player.displayName}</div>
+				<div class="truncate"><a href="../user/{player.userId}">{player.displayName}</a></div>
 				: {player.score} points
-				<!-- {player.displayName} : {player.score} points -->
 			</li>
 		{/each}
 	</ul>
@@ -92,7 +97,7 @@
 
 	.header h1 {
 		font-size: 12vmin;
-		margin-top: 8vmin;
+		margin-top: 4vmin;
 		margin-bottom: 2vmin;
 		text-wrap: nowrap;
 	}
@@ -227,5 +232,17 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
+	}
+
+	.truncate a {
+		text-decoration: none;
+		color: #fff;
+		font-weight: 600;
+		font-family: myFirstFont;
+		-webkit-text-stroke: 0.1px black;
+	}
+
+	.truncate a:hover {
+		color: var(--base-black);
 	}
 </style>

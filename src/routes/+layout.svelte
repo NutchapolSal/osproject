@@ -25,7 +25,6 @@
 	:global(body) {
 		--base-black: #2e2c29;
 		--base-orange: #e6862e;
-		margin: 0;
 	}
 
 	.container {
