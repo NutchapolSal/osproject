@@ -1,4 +1,9 @@
-x-variables: &variables
+x-postgresvars: &postgresvars
+  POSTGRES_USER: osproject
+  POSTGRES_PASSWORD: pnaeibpbiaparpipabpaib # type anything in here
+
+x-webservervars: &webservervars
+  <<: *postgresvars
   # create a google cloud project
   # then APIs & Services > Credentials > Create Credentials > OAuth Client IDs
   # put in https://yoursite.com/login/google/callback
@@ -10,21 +15,22 @@ x-variables: &variables
   # this should be the postgres container's name
   POSTGRES_HOSTNAME: postgres
 
-x-postgresvars: &postgresvars
-  POSTGRES_USER: osproject
-  POSTGRES_PASSWORD: pnaeibpbiaparpipabpaib # type anything in here
+  # https://kit.svelte.dev/docs/adapter-node
+  # uncomment only if you are using a reverse proxy
+  # PROTOCOL_HEADER: X-Forwarded-Proto
+  # HOST_HEADER: X-Forwarded-Host
 
 services:
   webserver:
     image: nutchapolsal/osproject
     environment:
-      <<: *variables
-      <<: *postgresvars
+      <<: *webservervars
+    ports:
+      - 3000:3000
       
   postgres:
     image: postgres
     environment:
-      <<: *variables
       <<: *postgresvars
     volumes:
       - "osproject-data:/var/lib/postgresql/data"
