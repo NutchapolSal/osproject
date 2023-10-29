@@ -5,7 +5,7 @@
 	export let data: PageData;
 </script>
 
-<div class="menu-icon">
+<div class="menu-user">
 	{#if data.loginInfo}
 		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
 	{/if}
@@ -24,7 +24,7 @@
 		>
 	{/each}
 </div>
-<a href="./leaderBoard/{$gameModeStore}">🧛Leader Board</a>
+<a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
 <style>
@@ -41,7 +41,7 @@
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
 
-	.menu-icon {
+	.menu-user {
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
@@ -50,7 +50,7 @@
 		gap: 10px;
 	}
 
-	.menu-icon a {
+	.menu-user a {
 		font-size: 3.5vmin;
 		margin-left: auto;
 	}
