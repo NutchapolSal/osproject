@@ -16,7 +16,7 @@
 	<span style:font-size="6vmin">👤</span>
 	<div style:flex-direction="column" style:flex-grow="1">
 		<div style:justify-content="space-between" style:align-items="center">
-			<h1 class:hide={editing}>{data.shownUser.displayName}</h1>
+			<h1 class="truncate" class:hide={editing}>{data.shownUser.displayName}</h1>
 			{#if isSelf}
 				<form
 					class="content-center"
@@ -208,5 +208,12 @@
 	td {
 		font-size: 2vmin;
 		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	}
+
+	.truncate {
+		width: 50vmin;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 </style>
