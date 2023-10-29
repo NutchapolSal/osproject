@@ -1,22 +1,26 @@
-import { getScoresFromUserId, getUserFromId, updateDisplayName } from '$lib/server/db';
+import { getScores, getUserFromId, updateDisplayName } from '$lib/server/db';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { checkNullOrFile } from '$lib/checkNullOrFile';
 import postgres from 'postgres';
 import { auth } from '$lib/server/lucia';
+import { GameModes } from '../../gameModes';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	const [session, gotUser, scores] = await Promise.all([
-		locals.auth.validate(),
-		getUserFromId(params.id),
-		getScoresFromUserId(params.id)
-	]);
+	const [session, gotUser] = await Promise.all([locals.auth.validate(), getUserFromId(params.id)]);
 	if (gotUser == null) {
 		throw error(404, 'User not found');
 	}
+	const recents = await getScores({ limit: 10, userId: params.id, sortBy: 'recent' });
+	const highscores = await Promise.all(
+		Object.values(GameModes).map(async (gameMode) => ({
+			mode: gameMode,
+			scores: await getScores({ limit: 10, userId: params.id, sortBy: 'highscore', gameMode })
+		}))
+	);
 	return {
 		shownUser: gotUser,
-		shownScores: scores,
+		shownScores: { highscores, recents },
 		loginInfo:
 			session == null
 				? null

@@ -78,30 +78,14 @@ export async function getUserFromId(id: string) {
 		displayName: user.display_name as string
 	};
 }
+type ScoresQueryOptions = {
+	limit?: number;
+	sortBy?: 'highscore' | 'recent';
+	userId?: string;
+	gameMode?: GameModes;
+};
 
-export async function getScoresFromUserId(id: string) {
-	const results: {
-		score: number;
-		gameMode: string;
-		timeStart: Date;
-	}[] = [];
-	await sql`
-	SELECT score.score, score.game_mode, score.time_start FROM score
-	WHERE score.user_id = ${id}
-	ORDER BY score DESC
-	LIMIT 10
-	`.forEach((score) => {
-		results.push({
-			score: score.score,
-			gameMode: score.game_mode,
-			timeStart: score.time_start
-		});
-	});
-
-	return results;
-}
-
-export async function getLeaderboards(gameMode: GameModes) {
+export async function getScores(options: ScoresQueryOptions = {}) {
 	const results: {
 		score: number;
 		gameMode: string;
@@ -109,11 +93,28 @@ export async function getLeaderboards(gameMode: GameModes) {
 		userId: string;
 		displayName: string;
 	}[] = [];
+	const whereUserId = options.userId != null ? sql`score.user_id = ${options.userId}` : null;
+	const whereGameMode =
+		options.gameMode != null ? sql`score.game_mode = ${options.gameMode}` : null;
+	const whereClause =
+		whereUserId != null
+			? sql`WHERE ${whereUserId}${whereGameMode != null ? sql` AND ${whereGameMode}` : sql``}`
+			: whereGameMode != null
+			? sql`WHERE ${whereGameMode}`
+			: sql``;
+	const sortByClause =
+		options.sortBy === 'highscore'
+			? sql`ORDER BY score DESC`
+			: options.sortBy === 'recent'
+			? sql`ORDER BY time_start DESC`
+			: sql``;
+
 	await sql`
 	SELECT score.score, score.game_mode, score.time_start, score.user_id, auth_user.display_name FROM score
 	INNER JOIN auth_user ON score.user_id = auth_user.id
-	WHERE score.game_mode = ${gameMode}
-	ORDER BY score DESC
+	${whereClause}
+	${sortByClause}
+	${options.limit != null ? sql`LIMIT ${options.limit}` : sql``}
 	`.forEach((score) => {
 		results.push({
 			score: score.score,

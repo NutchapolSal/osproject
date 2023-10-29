@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { relativeTimeFromDates } from '$lib/relativeTimeCalculator.js';
 
 	export let data;
 	export let form;
@@ -12,7 +13,7 @@
 	<p class="error">{form.error}</p>
 {/if}
 <div class="profile-menu header">
-	<span style:font-size="6vw">👤</span>
+	<span style:font-size="6vmin">👤</span>
 	<div style:flex-direction="column" style:flex-grow="1">
 		<div style:justify-content="space-between" style:align-items="center">
 			<h1 class:hide={editing}>{data.shownUser.displayName}</h1>
@@ -72,9 +73,9 @@
 </div>
 
 <div class="profile-menu">
-	<p class="text">history</p>
+	<p class="text">Recent</p>
 	<table>
-		{#each data.shownScores as score}
+		{#each data.shownScores.recents as score}
 			<tr>
 				<td>
 					{score.score}
@@ -83,12 +84,33 @@
 					{score.gameMode}
 				</td>
 				<td>
-					{score.timeStart.toISOString()}
+					{relativeTimeFromDates(score.timeStart)}
 				</td>
 			</tr>
 		{/each}
 	</table>
 </div>
+
+{#each data.shownScores.highscores as table}
+	<div class="profile-menu">
+		<p class="text">Highscore: {table.mode}</p>
+		<table>
+			{#each table.scores as score}
+				<tr>
+					<td>
+						{score.score}
+					</td>
+					<td>
+						{score.gameMode}
+					</td>
+					<td>
+						{relativeTimeFromDates(score.timeStart)}
+					</td>
+				</tr>
+			{/each}
+		</table>
+	</div>
+{/each}
 
 <style>
 	.hide {
@@ -97,7 +119,7 @@
 
 	form {
 		display: flex;
-		gap: 1vw;
+		gap: 1vmin;
 		align-items: center;
 	}
 
@@ -110,7 +132,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		gap: 1vw;
+		gap: 1vmin;
 	}
 	.header div {
 		display: flex;
@@ -120,7 +142,7 @@
 	.header input {
 		color: var(--base-orange);
 		font-family: myFirstFont;
-		font-size: 6vw;
+		font-size: 6vmin;
 	}
 
 	.header input {
@@ -134,29 +156,29 @@
 
 	.header code {
 		color: #ccc;
-		font-size: 2.2vw;
+		font-size: 2.2vmin;
 	}
 
 	button {
 		text-decoration: none;
 		color: #fff;
 		background: var(--base-black);
-		font-size: 3vw;
+		font-size: 3vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
-		padding-left: 3vw;
-		padding-right: 3vw;
-		padding-top: 0.5vw;
-		padding-bottom: 0.5vw;
+		padding-left: 3vmin;
+		padding-right: 3vmin;
+		padding-top: 0.5vmin;
+		padding-bottom: 0.5vmin;
 		border-radius: 980px;
 		white-space: nowrap;
 	}
 
 	.profile-menu {
-		border-radius: 3vw;
+		border-radius: 3vmin;
 		background: var(--base-black);
-		padding: 2.5vw;
-		width: 70vw;
+		padding: 2.5vmin;
+		width: 70vmin;
 		height: 100%;
 	}
 
@@ -168,18 +190,23 @@
 	.text {
 		font-family: myFirstFont;
 		color: #ffffff;
-		font-size: 6vw;
+		font-size: 6vmin;
 		font-weight: 600;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: center;
 		width: 100%;
-		gap: 3vw;
+		gap: 3vmin;
 		margin: 0;
 	}
 
 	table {
 		width: 100%;
+	}
+
+	td {
+		font-size: 2vmin;
+		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 	}
 </style>
