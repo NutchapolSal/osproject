@@ -74,8 +74,8 @@ export async function getUserFromId(id: string) {
 		return null;
 	}
 	return {
-		id: user.id,
-		displayName: user.display_name
+		id: user.id as string,
+		displayName: user.display_name as string
 	};
 }
 
