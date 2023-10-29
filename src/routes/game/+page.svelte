@@ -135,10 +135,10 @@
 
 	let playerGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
 	let targetGrid: boolean[][] = new Array(size).fill(false).map(() => new Array(size).fill(false));
+	let gameStarted = false;
 	let playerRotation = 0;
 	let targetRotation = 0;
 	let gridsCount = 1;
-	let stopPointerHold = 0;
 	let currentSpinSetupI = 0;
 	let dateTimeStart: Date | null = null;
 	let scoreSubmissionState = ScoreSubmissionState.NOT_SUBMITTED;
@@ -147,8 +147,9 @@
 	for (let i = 0; i < 100; i++) {
 		spinRand();
 	}
-	let blanked = memoryMode;
+	let blanked = true;
 	let blankTimer = setTimeout(() => {}, 0);
+	let emptyTargetCheck = setTimeout(() => {}, 0);
 
 	function startNewGrid() {
 		for (let y = 0; y < size; y++) {
@@ -157,6 +158,9 @@
 				targetGrid[y][x] = gridRand() > 0.5;
 			}
 		}
+		emptyTargetCheck = setTimeout(() => {
+			runGridChecks();
+		}, 600);
 	}
 
 	/**
@@ -210,20 +214,22 @@
 
 	$: score = (gridsCount - 1) * 10;
 
-	startNewGrid();
-	spinIt();
-	$: {
-		playerGrid;
-		if (checkMatching()) {
+	function runGridChecks() {
+		if (gameStarted && checkMatching()) {
 			gridsCount++;
 			increaseTime();
 			startNewGrid();
-			stopPointerHold++;
 			spinIt();
 			if (memoryMode) {
 				unblank();
 			}
 		}
+	}
+
+	$: {
+		playerGrid;
+		clearTimeout(emptyTargetCheck);
+		runGridChecks();
 	}
 
 	let countdownNum = 0;
@@ -257,16 +263,23 @@
 		nowTime = performance.now();
 		if (!gameOver) requestAnimationFrame(updateNowTime);
 	}
+	function beginGame() {
+		gameStarted = true;
+		startNewGrid();
+		spinIt();
+		blanked = false;
+		if (memoryMode) {
+			unblank();
+		}
+		startTheTime();
+	}
 
 	onMount(() => {
 		countdownNum = 3;
 		const countdownInterval = setInterval(() => {
 			countdownNum--;
 			if (countdownNum <= 0) {
-				if (memoryMode) {
-					unblank();
-				}
-				startTheTime();
+				beginGame();
 				clearInterval(countdownInterval);
 			}
 		}, 1000);
@@ -276,8 +289,8 @@
 <div class="barcontainer">
 	<div
 		class="energy-bar"
-		class:low={timeBarFrac <= 0.3 && countdownNum == 0}
-		style="width: {countdownNum > 0 ? 100 : timeBarFrac * 100}%"
+		class:low={timeBarFrac <= 0.3 && gameStarted}
+		style="width: {!gameStarted ? 100 : timeBarFrac * 100}%"
 	/>
 </div>
 <div class="gamecontainer">
@@ -300,8 +313,8 @@
 			<GameGrid
 				bind:grid={playerGrid}
 				rotation={playerRotation}
-				noninteractive={countdownNum != 0 || gameOver}
-				{stopPointerHold}
+				noninteractive={!gameStarted || gameOver}
+				newGrid={gridsCount - 1}
 				--spinDuration={`${diffSetups[currentSpinSetupI].player?.duration ?? 0.5}s`}
 			/>
 		</div>
@@ -412,7 +425,6 @@
 	}
 
 	.splash-screen {
-		background-size: cover;
 		height: 100vh;
 		width: 100vw;
 		font-size: 125px;
