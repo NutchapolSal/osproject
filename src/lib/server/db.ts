@@ -128,6 +128,41 @@ export async function getScores(options: ScoresQueryOptions = {}) {
 	return results;
 }
 
+export async function getLeaderboard(gameMode: GameModes) {
+	const results: {
+		score: number;
+		gameMode: string;
+		timeStart: Date;
+		userId: string;
+		displayName: string;
+	}[] = [];
+
+	await sql`
+	SELECT u.id user_id, u.display_name, s.id score_id, s.score, s.game_mode, s.version_hash, s.game_seed, s.time_start, s.game_duration
+	FROM auth_user u
+	CROSS JOIN LATERAL (
+		SELECT *
+		FROM score s
+		WHERE s.user_id = u.id
+		AND s.game_mode = ${gameMode}
+		ORDER BY s.score DESC
+		LIMIT 1
+	) s
+	ORDER BY s.score DESC
+	LIMIT 100
+	`.forEach((score) => {
+		results.push({
+			score: score.score,
+			gameMode: score.game_mode,
+			timeStart: score.time_start,
+			userId: score.user_id,
+			displayName: score.display_name
+		});
+	});
+
+	return results;
+}
+
 export async function updateDisplayName(userId: string, displayName: string) {
 	await sql`UPDATE auth_user SET display_name = ${displayName} WHERE id = ${userId}`;
 }

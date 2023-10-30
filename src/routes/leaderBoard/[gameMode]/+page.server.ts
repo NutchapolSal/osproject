@@ -1,4 +1,4 @@
-import { getScores } from '$lib/server/db';
+import { getLeaderboard } from '$lib/server/db';
 import { error } from '@sveltejs/kit';
 import { reverseMapGameModes } from '../../gameModes';
 import type { PageServerLoad } from './$types';
@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, 'unknown game mode');
 	}
 	return {
-		scores: await getScores({ sortBy: 'highscore', gameMode: gameMode, limit: 100 }),
+		scores: await getLeaderboard(gameMode),
 		gameMode: gameMode
 	};
 };
