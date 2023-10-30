@@ -6,12 +6,15 @@
 	export let form;
 	let isSelf = data.loginInfo?.isSelf ?? false;
 	let editing = false;
+	$: {
+		if (form?.error != null) {
+			editing = true;
+		}
+	}
 	let waiting = false;
+	let inputBox: HTMLInputElement;
 </script>
 
-{#if form?.error}
-	<p class="error">{form.error}</p>
-{/if}
 <div class="profile-menu header">
 	<span style:font-size="6vmin">👤</span>
 	<div style:flex-direction="column" style:flex-grow="1">
@@ -21,7 +24,25 @@
 				<form
 					class="content-center"
 					method="POST"
-					use:enhance={() => {
+					use:enhance={({ formData, cancel }) => {
+						const displayname = formData.get('displayName');
+						if (typeof displayname == 'string') {
+							const trimmed = displayname.trim();
+							inputBox.value = trimmed;
+							if (data.shownUser.displayName == trimmed) {
+								cancel();
+								editing = false;
+								return;
+							}
+							if (trimmed.length < 3) {
+								cancel();
+								form = {
+									error: 'Display name must be at least 3 characters long',
+									formName: trimmed
+								};
+								return;
+							}
+						}
 						waiting = true;
 
 						return async ({ update }) => {
@@ -36,7 +57,7 @@
 					<input
 						type="text"
 						name="displayName"
-						value={data.shownUser.displayName}
+						value={form?.formName ?? data.shownUser.displayName}
 						required
 						minlength="3"
 						autocomplete="off"
@@ -45,6 +66,7 @@
 						class:hide={!editing}
 						style:flex-grow="1"
 						style:width="0px"
+						bind:this={inputBox}
 					/>
 					<button type="submit" disabled={waiting} class:hide={!editing} formaction="?/editName">
 						{waiting ? 'saving...' : 'save'}
@@ -54,7 +76,10 @@
 						type="button"
 						disabled={waiting}
 						class:hide={!editing}
-						on:click={() => (editing = false)}
+						on:click={() => {
+							editing = false;
+							form = null;
+						}}
 					>
 						cancel
 					</button>
@@ -62,6 +87,9 @@
 				<button type="button" on:click={() => (editing = true)} class:hide={editing}>edit</button>
 			{/if}
 		</div>
+		{#if form?.error}
+			<p class="error">⚠&#xFE0F {form.error}</p>
+		{/if}
 		<div style:justify-content="space-between" style:align-items="flex-start">
 			<code>{data.shownUser.id}</code>
 			{#if isSelf}
@@ -161,6 +189,14 @@
 
 	.header code {
 		color: #ccc;
+		font-size: 2.2vmin;
+		user-select: all;
+	}
+
+	.header p.error {
+		margin: 0;
+		color: rgb(255, 235, 144);
+		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 		font-size: 2.2vmin;
 	}
 

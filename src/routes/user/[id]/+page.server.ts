@@ -36,22 +36,23 @@ export const actions = {
 	editName: async ({ request, locals, params }) => {
 		const session = await locals.auth.validate();
 		if (!session || params.id !== session.user.userId) {
-			return fail(401, { error: 'unauthorized' });
+			return fail(401, { error: 'Unauthorized', formName: undefined });
 		}
 		const data = await request.formData();
 
 		try {
-			const name = checkNullOrFile(data.get('displayName'), 'name');
+			const name = checkNullOrFile(data.get('displayName'), 'name').trim();
 			if (name.length < 3) {
-				throw new TypeError('name too short');
+				return fail(400, {
+					error: 'Display name must be at least 3 characters long',
+					formName: name
+				});
 			}
 			await updateDisplayName(params.id, name);
 		} catch (error) {
 			// https://github.com/porsager/postgres/issues/684
-			if (error instanceof TypeError) {
-				return fail(400, { error: error.message });
-			} else if (error instanceof postgres.PostgresError) {
-				return fail(400, { error: 'bad request' });
+			if (error instanceof postgres.PostgresError) {
+				return fail(400, { error: 'Bad Request', formName: undefined });
 			}
 		}
 	},
