@@ -8,6 +8,8 @@
 <div class="menu-user">
 	{#if data.loginInfo}
 		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
+	{:else}
+		<a href="./login/google">Login with Google</a>
 	{/if}
 </div>
 <div class="widget-header">
