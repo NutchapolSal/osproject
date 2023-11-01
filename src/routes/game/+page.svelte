@@ -159,7 +159,7 @@
 			}
 		}
 		emptyTargetCheck = setTimeout(() => {
-			runGridChecks();
+			playerGrid[0][0] = false;
 		}, 600);
 	}
 
@@ -214,7 +214,9 @@
 
 	$: score = (gridsCount - 1) * 10;
 
-	function runGridChecks() {
+	$: {
+		playerGrid;
+		clearTimeout(emptyTargetCheck);
 		if (gameStarted && checkMatching()) {
 			gridsCount++;
 			increaseTime();
@@ -224,12 +226,6 @@
 				unblank();
 			}
 		}
-	}
-
-	$: {
-		playerGrid;
-		clearTimeout(emptyTargetCheck);
-		runGridChecks();
 	}
 
 	let countdownNum = 0;
