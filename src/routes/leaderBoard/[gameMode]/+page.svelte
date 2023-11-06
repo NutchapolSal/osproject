@@ -9,6 +9,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>{data.gameMode} Leaderboard - Candy Rotator</title>
+</svelte:head>
+
 <div class="header">
 	<h1>🎃 Leaderboard 🎃</h1>
 	<h2>{data.gameMode}</h2>

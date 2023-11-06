@@ -15,6 +15,10 @@
 	let inputBox: HTMLInputElement;
 </script>
 
+<svelte:head>
+	<title>{data.shownUser.displayName} on Candy Rotator</title>
+</svelte:head>
+
 <div class="profile-menu header">
 	<span style:font-size="6vmin">👤</span>
 	<div style:flex-direction="column" style:flex-grow="1">

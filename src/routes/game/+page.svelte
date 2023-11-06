@@ -282,6 +282,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Candy Rotator</title>
+</svelte:head>
+
 <div class="barcontainer">
 	<div
 		class="energy-bar"

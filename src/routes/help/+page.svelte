@@ -20,6 +20,11 @@
 		}
 	})
 </script>
+
+<svelte:head>
+	<title>Help - Candy Rotator</title>
+</svelte:head>
+
 <div class="widget-header">
 	<h1>How To Play</h1>
 </div>

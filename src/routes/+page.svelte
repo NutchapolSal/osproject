@@ -5,6 +5,10 @@
 	export let data: PageData;
 </script>
 
+<svelte:head>
+	<title>Candy Rotator</title>
+</svelte:head>
+
 <div class="menu-user">
 	{#if data.loginInfo}
 		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
