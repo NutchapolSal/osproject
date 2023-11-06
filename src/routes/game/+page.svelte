@@ -286,8 +286,9 @@
 	<div
 		class="energy-bar"
 		class:low={timeBarFrac <= 0.3 && gameStarted}
-		style="width: {!gameStarted ? 100 : timeBarFrac * 100}%"
+		style="width: {!gameStarted ? 100 : Math.min(Math.max(0, timeBarFrac), 1) * 100}%"
 	/>
+	<div class="energy-bar two" style="width: {Math.min(Math.max(0, timeBarFrac - 1), 1) * 100}%" />
 </div>
 <div class="gamecontainer">
 	<div class="game-content">
@@ -384,6 +385,8 @@
 		border-radius: 4vmin;
 		margin-top: 6vmin;
 		margin-bottom: 6vmin;
+		display: grid;
+		grid-template-areas: 'barspace';
 	}
 
 	.energy-bar {
@@ -392,6 +395,12 @@
 		box-shadow: 0 0 10px var(--base-black);
 		border-radius: 4vmin;
 		transition: width 0.1s, background-color 0.25s;
+		grid-area: barspace;
+	}
+
+	.energy-bar.two {
+		background-color: #4faaff;
+		box-shadow: none;
 	}
 
 	.game-content {
