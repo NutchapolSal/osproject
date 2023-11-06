@@ -2,9 +2,22 @@ import { createNewScore } from '$lib/server/db';
 import postgres from 'postgres';
 import type { PageServerLoad } from './$types';
 import { checkNullOrFile } from '$lib/checkNullOrFile';
-export const load: PageServerLoad = async () => ({
-	gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
-});
+
+export const load: PageServerLoad = async ({ locals }) => {
+	const session = await locals.auth.validate();
+	const loginInfo =
+		session == null
+			? null
+			: {
+					displayName: session.user.displayName,
+					userId: session.user.userId
+			  };
+
+	return {
+		loginInfo,
+		gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
+	};
+};
 
 export const actions = {
 	default: async ({ cookies, request, locals }) => {
