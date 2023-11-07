@@ -1,14 +1,20 @@
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
 	const session = await locals.auth.validate();
-	if (session == null) {
-		return { loginInfo: null };
-	}
+	const loginInfo =
+		session == null
+			? null
+			: {
+					displayName: session.user.displayName,
+					userId: session.user.userId
+			  };
+
 	return {
-		loginInfo: {
-			displayName: session.user.displayName,
-			userId: session.user.userId
+		loginInfo,
+		url: {
+			href: url.href,
+			origin: url.origin
 		}
 	};
 };

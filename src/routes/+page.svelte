@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { GameModes, gameModeStore } from './gameModes';
 	import type { PageData } from './$types';
+	import CandyIcon from '$lib/images/candyIcon.png';
 
 	export let data: PageData;
 </script>
 
 <svelte:head>
 	<title>Candy Rotator</title>
+	<meta property="og:title" content="Candy Rotator" />
+	<meta property="og:description" content="a game about candies and rotation" />
+	<meta property="og:url" content={data.url.href} />
+	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
 </svelte:head>
 
 <div class="menu-user">

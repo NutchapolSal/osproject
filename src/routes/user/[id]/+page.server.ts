@@ -6,7 +6,7 @@ import postgres from 'postgres';
 import { auth } from '$lib/server/lucia';
 import { GameModes } from '../../gameModes';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params, locals, url }) => {
 	const [session, gotUser] = await Promise.all([locals.auth.validate(), getUserFromId(params.id)]);
 	if (gotUser == null) {
 		throw error(404, 'User not found');
@@ -28,7 +28,11 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 						displayName: session.user.displayName,
 						userId: session.user.userId,
 						isSelf: session.user.userId === params.id
-				  }
+				  },
+		url: {
+			href: url.href,
+			origin: url.origin
+		}
 	};
 };
 

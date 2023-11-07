@@ -2,7 +2,11 @@ import { createNewScore } from '$lib/server/db';
 import postgres from 'postgres';
 import type { PageServerLoad } from './$types';
 import { checkNullOrFile } from '$lib/checkNullOrFile';
-export const load: PageServerLoad = async () => ({
+export const load: PageServerLoad = async ({ url }) => ({
+	url: {
+		href: url.href,
+		origin: url.origin
+	},
 	gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
 });
 
