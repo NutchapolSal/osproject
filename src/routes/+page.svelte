@@ -3,6 +3,14 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	let showSeedBox = false;
+	let userSeed = '';
+	let seedTyped = false;
+	$: {
+		if (userSeed != '') {
+			seedTyped = true;
+		}
+	}
 </script>
 
 <div class="menu-user">
@@ -15,7 +23,7 @@
 <div class="widget-header">
 	<h1>Candy Rotator</h1>
 </div>
-<a href="./game">🎃 Start 🦇</a>
+<a href={`./game${userSeed == '' ? '' : `?seed=${encodeURIComponent(userSeed)}`}`}>🎃 Start 🦇</a>
 <div class="menu-group">
 	{#each Object.values(GameModes) as mode}
 		<button
@@ -26,6 +34,31 @@
 		>
 	{/each}
 </div>
+<button
+	type="button"
+	on:click|self={() => {
+		showSeedBox = !showSeedBox;
+		if (!showSeedBox) {
+			userSeed = '';
+		}
+	}}
+>
+	{#if userSeed == ''}
+		🌱
+	{:else}
+		🌳
+	{/if}
+
+	{#if showSeedBox}
+		<input
+			type="text"
+			name="gameSeed"
+			placeholder={!seedTyped ? 'Game Seed' : 'random'}
+			bind:value={userSeed}
+			autocomplete="off"
+		/>
+	{/if}
+</button>
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
