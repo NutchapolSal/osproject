@@ -5,9 +5,10 @@
 	import { GameModes, gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 
 	export let data;
+	export let form;
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
@@ -333,9 +334,13 @@
 								method="POST"
 								use:enhance={() => {
 									scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
-									return async ({ update }) => {
-										await update();
-										scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+									return async ({ result }) => {
+										if (result.type == 'failure') {
+											await applyAction(result);
+											scoreSubmissionState = ScoreSubmissionState.FAILED;
+										} else {
+											scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+										}
 									};
 								}}
 							>
@@ -353,7 +358,7 @@
 						{/if}
 
 						{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
-							<p>💢</p>
+							<p>💢 {form?.error}</p>
 						{/if}
 
 						{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
