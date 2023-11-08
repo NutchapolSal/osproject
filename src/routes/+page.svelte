@@ -3,6 +3,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	let showSeedBox = false;
 	let userSeed = '';
 </script>
 
@@ -26,8 +28,32 @@
 			class="menu-mode">{mode}</button
 		>
 	{/each}
+	<button
+		type="button"
+		on:click|self={() => {
+			showSeedBox = !showSeedBox;
+			if (!showSeedBox) {
+				userSeed = '';
+			}
+		}}
+	>
+		{#if userSeed == ''}
+			🌱
+		{:else}
+			🌳
+		{/if}
+	</button>
 </div>
-<input type="text" name="gameSeed" placeholder="Seed..." bind:value={userSeed} autocomplete="off" />
+
+<input
+	type="text"
+	name="gameSeed"
+	placeholder="Game Seed..."
+	bind:value={userSeed}
+	autocomplete="off"
+	class:hidden={!showSeedBox}
+/>
+
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
@@ -112,9 +138,18 @@
 		font-family: myFirstFont;
 		font-size: 5.5vmin;
 		border-radius: 7.8vmin;
-		transition: 0.5s all ease-in-out;
+		transition: 0.35s all cubic-bezier(0.33, 1, 0.68, 1);
 		background-color: transparent;
 		filter: brightness(170%);
+		height: 6vmin;
+		opacity: 100%;
+	}
+
+	input[type='text'].hidden {
+		height: 0px;
+		padding: 0px;
+		border: var(--base-black) 0px solid;
+		opacity: 20%;
 	}
 
 	input[type='text']:focus,
