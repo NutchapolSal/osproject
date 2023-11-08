@@ -27,7 +27,23 @@
 		>
 	{/each}
 </div>
-<input type="text" name="gameSeed" placeholder="Seed..." bind:value={userSeed} autocomplete="off" />
+<div class="seed-box">
+	<button class="btn-seed" type="button">
+		{#if userSeed == ''}
+			🌱
+		{:else}
+			🌳
+		{/if}
+	</button>
+	<input
+		class="input-seed"
+		type="text"
+		name="gameSeed"
+		placeholder="Enter seed..."
+		bind:value={userSeed}
+		autocomplete="off"
+	/>
+</div>
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
@@ -61,11 +77,11 @@
 	.menu-group {
 		display: flex;
 		flex-direction: row;
+		align-items: center;
 		gap: 16px;
 	}
 
 	.menu-mode {
-		border-radius: 980px;
 		font-family: myFirstFont;
 		font-size: 7.2vmin;
 		font-weight: 600;
@@ -78,6 +94,63 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
+		border-radius: 6vmin;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+	.seed-box {
+		width: fit-content;
+		height: fit-content;
+		position: relative;
+	}
+	.input-seed {
+		width: 50px;
+		height: 50px;
+		border-style: none;
+		padding: 10px;
+		font-family: myFirstFont;
+		font-size: 3vmin;
+		letter-spacing: 2px;
+		outline: none;
+		border-radius: 25px;
+		transition: all 0.5s ease-in-out;
+		background-color: var(--base-black);
+		padding-right: 40px;
+		color: #fff;
+	}
+	.input-seed::placeholder {
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 3vmin;
+		letter-spacing: 2px;
+		font-weight: 100;
+	}
+	.input-seed:focus {
+		width: 42vmin;
+		background-color: var(--base-black);
+		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+	}
+	.btn-seed {
+		width: 50px;
+		height: 50px;
+		border-style: none;
+		font-size: 20px;
+		font-weight: bold;
+		outline: none;
+		cursor: pointer;
+		border-radius: 6vmin;
+		position: absolute;
+		right: 0px;
+		color: #ffffff;
+		background-color: transparent;
+		pointer-events: painted;
+	}
+	.btn-seed:focus ~ .input-seed {
+		display: flex;
+		width: 42vmin;
+		background-color: var(--base-orange);
+		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
 
 	a {
@@ -91,7 +164,7 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
-		border-radius: 980px;
+		border-radius: 6vmin;
 	}
 
 	a:hover {
@@ -103,24 +176,5 @@
 		filter: none;
 		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
 		border: var(--base-orange) 2px solid;
-	}
-
-	input[type='text'] {
-		width: 25vmin;
-		padding: 0.1vmin 3vmin 0.1vmin 3vmin;
-		border: var(--base-black) 0.6vmin solid;
-		font-family: myFirstFont;
-		font-size: 5.5vmin;
-		border-radius: 7.8vmin;
-		transition: 0.5s all ease-in-out;
-		background-color: transparent;
-		filter: brightness(170%);
-	}
-
-	input[type='text']:focus,
-	input[type='text']:not(:placeholder-shown) {
-		width: 40vmin;
-		background-color: white;
-		filter: brightness(100%);
 	}
 </style>
