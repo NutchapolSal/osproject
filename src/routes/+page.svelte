@@ -103,52 +103,51 @@
 	.seed-box {
 		width: fit-content;
 		height: fit-content;
-		position: relative;
+		display: flex;
+		flex-direction: row-reverse;
+		border-radius: 5vmin;
+		background-color: var(--base-black);
+		transition: background-color 500ms cubic-bezier(0.33, 1, 0.68, 1);
 	}
 	.input-seed {
-		width: 50px;
-		height: 50px;
+		width: 0px;
+		height: 10vmin;
 		border-style: none;
-		padding: 10px;
+		padding: 0px;
 		font-family: myFirstFont;
-		font-size: 3vmin;
-		letter-spacing: 2px;
+		font-size: 5vmin;
 		outline: none;
-		border-radius: 25px;
-		transition: all 0.5s ease-in-out;
-		background-color: var(--base-black);
-		padding-right: 40px;
+		transition: all 0.5s ease-in-out, padding-left 500ms cubic-bezier(0.5, 0, 0.75, 0);
+		background-color: transparent;
+		padding-right: 0px;
 		color: #fff;
 	}
 	.input-seed::placeholder {
 		color: rgba(255, 255, 255, 0.5);
-		font-size: 3vmin;
-		letter-spacing: 2px;
+		font-size: 5vmin;
 		font-weight: 100;
 	}
+	.btn-seed:focus ~ .input-seed,
 	.input-seed:focus {
 		width: 42vmin;
-		background-color: var(--base-black);
+		padding-left: 4vmin;
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
 	.btn-seed {
-		width: 50px;
-		height: 50px;
+		width: 10vmin;
+		height: 10vmin;
 		border-style: none;
-		font-size: 20px;
+		font-size: 4vmin;
 		font-weight: bold;
 		outline: none;
 		cursor: pointer;
 		border-radius: 6vmin;
-		position: absolute;
 		right: 0px;
 		color: #ffffff;
 		background-color: transparent;
 		pointer-events: painted;
 	}
-	.btn-seed:focus ~ .input-seed {
-		display: flex;
-		width: 42vmin;
+	.seed-box:has(.btn-seed:focus) {
 		background-color: var(--base-orange);
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
