@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { relativeTimeFromDates } from '$lib/relativeTimeCalculator.js';
+	import CandyIcon from '$lib/images/candyIcon.png';
 
 	export let data;
 	export let form;
@@ -14,6 +15,16 @@
 	let waiting = false;
 	let inputBox: HTMLInputElement;
 </script>
+
+<svelte:head>
+	<title>{data.shownUser.displayName} on Candy Rotator</title>
+	<meta property="og:title" content={data.shownUser.displayName} />
+	<meta property="og:description" content="a player" />
+	<meta property="og:url" content={data.url.href} />
+	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta property="og:site_name" content="Candy Rotator" />
+	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
+</svelte:head>
 
 <div class="profile-menu header">
 	<span style:font-size="6vmin">👤</span>

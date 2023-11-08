@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { enhance } from '$app/forms';
+	import CandyIcon from '$lib/images/candyIcon.png';
 
 	export let data;
 	const gameSeed = data.gameSeed;
@@ -281,6 +282,16 @@
 		}, 1000);
 	});
 </script>
+
+<svelte:head>
+	<title>Candy Rotator</title>
+	<meta property="og:title" content="Game" />
+	<meta property="og:description" content="let's play!" />
+	<meta property="og:url" content={data.url.href} />
+	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta property="og:site_name" content="Candy Rotator" />
+	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
+</svelte:head>
 
 <div class="barcontainer">
 	<div

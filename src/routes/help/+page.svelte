@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import CandyIcon from '$lib/images/candyIcon.png';
 	import GameGrid from "../game/GameGrid.svelte";
+
+	export let data;
 
 	const grid = [
 		[false, false, false], 
@@ -20,6 +23,17 @@
 		}
 	})
 </script>
+
+<svelte:head>
+	<title>Help - Candy Rotator</title>
+	<meta property="og:title" content="Help" />
+	<meta property="og:description" content="how to play this game" />
+	<meta property="og:url" content={data.url.href} />
+	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta property="og:site_name" content="Candy Rotator" />
+	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
+</svelte:head>
+
 <div class="widget-header">
 	<h1>How To Play</h1>
 </div>
