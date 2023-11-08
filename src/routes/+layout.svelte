@@ -33,7 +33,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		gap: 2vmin;
+		gap: 1.5vmin;
 		padding-top: 0%;
 	}
 </style>

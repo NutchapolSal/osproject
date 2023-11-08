@@ -3,14 +3,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	let showSeedBox = false;
 	let userSeed = '';
-	let seedTyped = false;
-	$: {
-		if (userSeed != '') {
-			seedTyped = true;
-		}
-	}
 </script>
 
 <div class="menu-user">
@@ -34,31 +27,7 @@
 		>
 	{/each}
 </div>
-<button
-	type="button"
-	on:click|self={() => {
-		showSeedBox = !showSeedBox;
-		if (!showSeedBox) {
-			userSeed = '';
-		}
-	}}
->
-	{#if userSeed == ''}
-		🌱
-	{:else}
-		🌳
-	{/if}
-
-	{#if showSeedBox}
-		<input
-			type="text"
-			name="gameSeed"
-			placeholder={!seedTyped ? 'Game Seed' : 'random'}
-			bind:value={userSeed}
-			autocomplete="off"
-		/>
-	{/if}
-</button>
+<input type="text" name="gameSeed" placeholder="Seed..." bind:value={userSeed} autocomplete="off" />
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
@@ -67,9 +36,8 @@
 		width: 100%;
 		display: flex;
 		font-family: myFirstFont;
-		font-size: 22vmin;
-		margin-top: 0%;
-		margin-bottom: 0%;
+		font-size: 21vmin;
+		margin: 0;
 		color: var(--base-orange);
 		text-align: center;
 		line-height: 1;
@@ -133,9 +101,26 @@
 	button[aria-current='true'] {
 		transform: none;
 		filter: none;
-
-		/* box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.2); */
 		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
 		border: var(--base-orange) 2px solid;
+	}
+
+	input[type='text'] {
+		width: 25vmin;
+		padding: 0.1vmin 3vmin 0.1vmin 3vmin;
+		border: var(--base-black) 0.6vmin solid;
+		font-family: myFirstFont;
+		font-size: 5.5vmin;
+		border-radius: 7.8vmin;
+		transition: 0.5s all ease-in-out;
+		background-color: transparent;
+		filter: brightness(170%);
+	}
+
+	input[type='text']:focus,
+	input[type='text']:not(:placeholder-shown) {
+		width: 40vmin;
+		background-color: white;
+		filter: brightness(100%);
 	}
 </style>
