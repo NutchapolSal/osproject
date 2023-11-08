@@ -11,6 +11,19 @@
 			seedTyped = true;
 		}
 	}
+	function getSearchParamsString(userSeed: string, gameMode: GameModes) {
+		const params = new URLSearchParams();
+		if (userSeed != '') {
+			params.set('seed', userSeed);
+		}
+		if (gameMode != GameModes.Normal) {
+			params.set('mode', gameMode);
+		}
+		if (0 == params.size) {
+			return '';
+		}
+		return `?${params.toString()}`;
+	}
 </script>
 
 <div class="menu-user">
@@ -23,7 +36,7 @@
 <div class="widget-header">
 	<h1>Candy Rotator</h1>
 </div>
-<a href={`./game${userSeed == '' ? '' : `?seed=${encodeURIComponent(userSeed)}`}`}>🎃 Start 🦇</a>
+<a href={`./game${getSearchParamsString(userSeed, $gameModeStore)}`}>🎃 Start 🦇</a>
 <div class="menu-group">
 	{#each Object.values(GameModes) as mode}
 		<button
