@@ -35,7 +35,7 @@
 	<div class="about-me-widget-header">
 		<div class="spinny" style:rotate={`${rotation}deg`}>
 			<div class="wiggly">
-				<GameSquare bind:state={squareState} corner={true} />
+				<GameSquare bind:state={squareState} corner={true} medium={true} />
 			</div>
 		</div>
 		<div style="display: flex; flex-direction: column;">

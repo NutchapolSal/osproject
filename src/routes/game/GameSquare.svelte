@@ -7,6 +7,7 @@
 	export let state: boolean;
 	export let noninteractive: boolean = false;
 	export let small: boolean = false;
+	export let medium: boolean = false;
 	export let corner: boolean = false;
 	export let newGrid: number = 0;
 	export let blanked: boolean = false;
@@ -45,16 +46,17 @@
 			}}
 			class:stateOn={state}
 			class:small
+			class:medium
 			class:blanked
 		/>
 	{:else}
-		<div class="square game" class:small class:stateOn={state} class:blanked />
+		<div class="square game" class:small class:medium class:stateOn={state} class:blanked />
 	{/if}
 	{#if corner}
-		<div class="square cornercase" class:small class:blanked />
+		<div class="square cornercase" class:small class:medium class:blanked />
 	{/if}
 
-	<div class="square flasher" class:small class:flash />
+	<div class="square flasher" class:small class:medium class:flash />
 </div>
 
 <style>
@@ -68,6 +70,11 @@
 		height: 20vmin;
 		border-radius: 2.5vmin;
 		grid-area: inner-area;
+	}
+	.square.medium {
+		width: 15vmin;
+		height: 15vmin;
+		border-radius: 1.875vmin;
 	}
 	.square.small {
 		width: 10vmin;
