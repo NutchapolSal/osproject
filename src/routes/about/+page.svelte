@@ -27,7 +27,7 @@
 </svelte:head>
 
 <div class="header-widget">
-	<h1>About {switchCount}</h1>
+	<h1>About</h1>
 </div>
 
 <div class="about-me-widget">
