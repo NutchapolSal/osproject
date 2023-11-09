@@ -226,6 +226,11 @@
 		white-space: nowrap;
 	}
 
+	button:hover {
+		background-color: var(--base-orange);
+		cursor: pointer;
+	}
+
 	.profile-menu {
 		border-radius: 3vmin;
 		background: var(--base-black);

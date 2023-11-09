@@ -89,6 +89,22 @@
 		padding-bottom: 1.2vmin;
 	}
 
+	.menu-mode:hover {
+		background-color: var(--base-orange);
+		cursor: pointer;
+	}
+
+	button[aria-current='true'] {
+		transform: none;
+		filter: none;
+		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
+		border: var(--base-orange) 2px solid;
+	}
+	button[aria-current='true']:hover {
+		background-color: var(--base-black);
+		cursor: default;
+	}
+
 	a {
 		text-decoration: none;
 		color: #fff;
@@ -105,14 +121,5 @@
 
 	a:hover {
 		background-color: var(--base-orange);
-	}
-
-	button[aria-current='true'] {
-		transform: none;
-		filter: none;
-
-		/* box-shadow: inset 3px 3px 4px rgba(0, 0, 0, 0.2); */
-		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
-		border: var(--base-orange) 2px solid;
 	}
 </style>
