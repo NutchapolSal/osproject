@@ -68,7 +68,7 @@
 	.header-widget h1 {
 		width: 100%;
 		display: flex;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 22vmin;
 		margin-top: 0%;
 		margin-bottom: 0%;
@@ -82,7 +82,7 @@
 	ul {
 		text-indent: 10vmin;
 		font-size: 5.5vmin;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		color: white;
 		display: flex;
 		flex-direction: column;
@@ -107,7 +107,7 @@
 	.about-me-widget h1,
 	.about-me-widget-header a {
 		font-size: 10vmin;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		margin: 0;
 		color: var(--base-orange);
 	}
