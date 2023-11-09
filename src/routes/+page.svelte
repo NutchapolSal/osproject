@@ -3,8 +3,9 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-	let showSeedBox = false;
+	let showExtraSettings = false;
 	let userSeed = '';
+	$: extraSettingsUsed = userSeed != '';
 	function getSearchParamsString(userSeed: string, gameMode: GameModes) {
 		const params = new URLSearchParams();
 		if (userSeed != '') {
@@ -40,24 +41,41 @@
 			class="menu-mode">{mode}</button
 		>
 	{/each}
-</div>
-<div class="seed-box">
-	<button class="btn-seed" type="button">
-		{#if userSeed == ''}
-			🌱
+	<button
+		type="button"
+		on:click={() => {
+			if (!extraSettingsUsed) {
+				showExtraSettings = !showExtraSettings;
+			}
+		}}
+		disabled={userSeed != ''}
+		class="extra-settings-toggle"
+		>{#if !showExtraSettings}🔻
 		{:else}
-			🌳
-		{/if}
-	</button>
-	<input
-		class="input-seed"
-		type="text"
-		name="gameSeed"
-		placeholder="Enter seed..."
-		bind:value={userSeed}
-		autocomplete="off"
-	/>
+			{#if !extraSettingsUsed}🔺 {:else} ⚠&#xFE0F {/if}
+		{/if}</button
+	>
 </div>
+<div class="extra-settings" class:hidden={!showExtraSettings}>
+	<div class="seed-box">
+		<button class="btn-seed" type="button">
+			{#if userSeed == ''}
+				🌱
+			{:else}
+				🌳
+			{/if}
+		</button>
+		<input
+			class="input-seed"
+			type="text"
+			name="gameSeed"
+			placeholder="Enter seed..."
+			bind:value={userSeed}
+			autocomplete="off"
+		/>
+	</div>
+</div>
+
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
@@ -170,6 +188,20 @@
 	.seed-box:has(.input-seed:hover) {
 		background-color: var(--base-orange);
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+	}
+
+	.extra-settings {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		max-height: 20vmin;
+		overflow: hidden;
+		transition: max-height 500ms;
+		gap: 1vmin;
+	}
+	.extra-settings.hidden {
+		max-height: 0px;
 	}
 
 	a {
