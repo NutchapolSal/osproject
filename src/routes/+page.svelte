@@ -93,7 +93,7 @@
 	.widget-header h1 {
 		width: 100%;
 		display: flex;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 21vmin;
 		margin: 0;
 		color: var(--base-orange);
@@ -124,7 +124,7 @@
 	}
 
 	.menu-mode {
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 7.2vmin;
 		font-weight: 600;
 		background: var(--base-black);
@@ -153,7 +153,7 @@
 		height: 10vmin;
 		border-style: none;
 		padding: 0px;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 5vmin;
 		outline: none;
 		transition: all 0.5s ease-in-out, padding-left 500ms cubic-bezier(0.5, 0, 0.75, 0);
@@ -250,7 +250,7 @@
 		background: var(--base-black);
 		font-size: 7.2vmin;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		padding-left: 3.4vmin;
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;

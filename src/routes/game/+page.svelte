@@ -442,7 +442,7 @@
 	}
 
 	p {
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 7.5vmin;
 		font-weight: 1000;
 		color: var(--base-black);
@@ -475,7 +475,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		gap: 16px;
 	}
 
@@ -484,7 +484,7 @@
 		color: #090505;
 		font-size: 6vmin;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		border-radius: 980px;
 		margin-top: 0%;
 		margin-bottom: 0%;
@@ -512,7 +512,7 @@
 		background: var(--base-black);
 		font-size: 6vmin;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		padding-left: 3.4vmin;
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;

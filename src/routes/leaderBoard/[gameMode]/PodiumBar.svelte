@@ -89,7 +89,7 @@
 		text-decoration: none;
 		color: #fff;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		-webkit-text-stroke: 0.1px black;
 		text-overflow: ellipsis;
 		overflow: hidden;

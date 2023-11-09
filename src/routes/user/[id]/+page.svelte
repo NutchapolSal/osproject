@@ -185,7 +185,7 @@
 	.header h1,
 	.header input {
 		color: var(--base-orange);
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 6vmin;
 	}
 
@@ -217,7 +217,7 @@
 		background: var(--base-black);
 		font-size: 3vmin;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		padding-left: 3vmin;
 		padding-right: 3vmin;
 		padding-top: 0.5vmin;
@@ -246,7 +246,7 @@
 	}
 
 	.text {
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		color: #ffffff;
 		font-size: 6vmin;
 		font-weight: 600;
