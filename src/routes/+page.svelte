@@ -4,6 +4,22 @@
 	import CandyIcon from '$lib/images/candyIcon.png';
 
 	export let data: PageData;
+	let showExtraSettings = false;
+	let userSeed = '';
+	$: extraSettingsUsed = userSeed != '';
+	function getSearchParamsString(userSeed: string, gameMode: GameModes) {
+		const params = new URLSearchParams();
+		if (userSeed != '') {
+			params.set('seed', userSeed);
+		}
+		if (gameMode != GameModes.Normal) {
+			params.set('mode', gameMode);
+		}
+		if (0 == params.size) {
+			return '';
+		}
+		return `?${params.toString()}`;
+	}
 </script>
 
 <svelte:head>
@@ -25,7 +41,7 @@
 <div class="widget-header">
 	<h1>Candy Rotator</h1>
 </div>
-<a href="./game">🎃 Start 🦇</a>
+<a href={`./game${getSearchParamsString(userSeed, $gameModeStore)}`}>🎃 Start 🦇</a>
 <div class="menu-group">
 	{#each Object.values(GameModes) as mode}
 		<button
@@ -35,7 +51,41 @@
 			class="menu-mode">{mode}</button
 		>
 	{/each}
+	<button
+		type="button"
+		on:click={() => {
+			if (!extraSettingsUsed) {
+				showExtraSettings = !showExtraSettings;
+			}
+		}}
+		disabled={userSeed != ''}
+		class="extra-settings-toggle"
+		>{#if !showExtraSettings}◀&#xFE0F
+		{:else}
+			{#if !extraSettingsUsed}🔽&#xFE0F {:else} ⚠&#xFE0F {/if}
+		{/if}
+	</button>
 </div>
+<div class="extra-settings" class:hidden={!showExtraSettings}>
+	<div class="seed-box">
+		<button class="btn-seed" type="button">
+			{#if userSeed == ''}
+				🌱
+			{:else}
+				🌳
+			{/if}
+		</button>
+		<input
+			class="input-seed"
+			type="text"
+			name="gameSeed"
+			placeholder="Enter seed..."
+			bind:value={userSeed}
+			autocomplete="off"
+		/>
+	</div>
+</div>
+
 <a href="./leaderBoard/{$gameModeStore}">🧛Leaderboard</a>
 <a href="./help">How to play🧟</a>
 
@@ -44,9 +94,8 @@
 		width: 100%;
 		display: flex;
 		font-family: myFirstFont;
-		font-size: 22vmin;
-		margin-top: 0%;
-		margin-bottom: 0%;
+		font-size: 21vmin;
+		margin: 0;
 		color: var(--base-orange);
 		text-align: center;
 		line-height: 1;
@@ -70,11 +119,11 @@
 	.menu-group {
 		display: flex;
 		flex-direction: row;
-		gap: 16px;
+		align-items: center;
+		gap: 1vmin;
 	}
 
 	.menu-mode {
-		border-radius: 980px;
 		font-family: myFirstFont;
 		font-size: 7.2vmin;
 		font-weight: 600;
@@ -87,6 +136,95 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
+		border-radius: 10vmin;
+	}
+
+	.seed-box {
+		width: fit-content;
+		height: fit-content;
+		display: flex;
+		flex-direction: row-reverse;
+		border-radius: 5vmin;
+		background-color: var(--base-black);
+		transition: background-color 500ms cubic-bezier(0.33, 1, 0.68, 1);
+	}
+	.input-seed {
+		width: 0px;
+		height: 10vmin;
+		border-style: none;
+		padding: 0px;
+		font-family: myFirstFont;
+		font-size: 5vmin;
+		outline: none;
+		transition: all 0.5s ease-in-out, padding-left 500ms cubic-bezier(0.5, 0, 0.75, 0);
+		background-color: transparent;
+		padding-right: 0px;
+		color: #fff;
+	}
+	.input-seed::placeholder {
+		color: rgba(255, 255, 255, 0.5);
+		font-size: 5vmin;
+		font-weight: 100;
+	}
+	.btn-seed:focus ~ .input-seed,
+	.input-seed:focus,
+	.btn-seed:hover ~ .input-seed,
+	.input-seed:hover,
+	.input-seed:not(:placeholder-shown) {
+		width: 42vmin;
+		padding-left: 4vmin;
+		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+	}
+	.btn-seed {
+		width: 10vmin;
+		height: 10vmin;
+		border-style: none;
+		font-size: 4vmin;
+		font-weight: bold;
+		outline: none;
+		cursor: pointer;
+		border-radius: 6vmin;
+		right: 0px;
+		color: #ffffff;
+		background-color: transparent;
+		pointer-events: painted;
+	}
+	.seed-box:has(.btn-seed:focus),
+	.seed-box:has(.btn-seed:hover),
+	.seed-box:has(.input-seed:focus),
+	.seed-box:has(.input-seed:hover) {
+		background-color: var(--base-orange);
+		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+	}
+
+	.extra-settings-toggle {
+		font-size: 5vmin;
+		padding: 1vmin;
+		background: var(--base-black);
+		border-radius: 10vmin;
+		transition: all 0.5s;
+		cursor: pointer;
+		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+	}
+	.extra-settings {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		max-height: 10vmin;
+		overflow: hidden;
+		transition-property: max-height, margin-bottom, margin-top;
+		transition-duration: 300ms;
+		transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+		gap: 1vmin;
+	}
+	.extra-settings.hidden {
+		max-height: 0px;
+		margin-bottom: -0.75vmin;
+		margin-top: -0.75vmin;
+	}
+	.extra-settings-toggle:disabled {
+		cursor: default;
 	}
 
 	.menu-mode:hover {
@@ -117,7 +255,7 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
-		border-radius: 980px;
+		border-radius: 10vmin;
 	}
 
 	a:hover {

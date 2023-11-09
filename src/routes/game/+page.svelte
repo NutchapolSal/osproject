@@ -2,7 +2,7 @@
 	import { seededSfc32 } from '$lib/rng';
 	import { onMount } from 'svelte';
 	import GameGrid from './GameGrid.svelte';
-	import { GameModes, gameModeStore } from '../gameModes';
+	import { GameModes } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { applyAction, enhance } from '$app/forms';
@@ -14,7 +14,7 @@
 
 	const size = 3;
 	const startRemainTime = 60000;
-	const memoryMode = $gameModeStore == GameModes.Memory;
+	const memoryMode = data.gameMode == GameModes.Memory;
 	const memoryModeTime = 3000;
 
 	enum SpinRange {
@@ -358,7 +358,7 @@
 							>
 								<input type="hidden" name="score" value={score} />
 								<input type="hidden" name="gameSeed" value={gameSeed} />
-								<input type="hidden" name="gameMode" value={$gameModeStore} />
+								<input type="hidden" name="gameMode" value={data.gameMode} />
 								<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
 								<input type="hidden" name="gameDuration" value={deathTime - startTime} />
 								<input type="hidden" name="gameVersion" value={'asd'} />
