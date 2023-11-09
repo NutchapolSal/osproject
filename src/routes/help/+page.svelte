@@ -1,27 +1,27 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { onMount } from 'svelte';
 	import CandyIcon from '$lib/images/candyIcon.png';
-	import GameGrid from "../game/GameGrid.svelte";
+	import GameGrid from '../game/GameGrid.svelte';
 
 	export let data;
 
 	const grid = [
-		[false, false, false], 
-		[false, false, false], 
-		[false, false, false], 
-	]
+		[false, false, false],
+		[false, false, false],
+		[false, false, false]
+	];
 
-	let rotation = 0
+	let rotation = 0;
 
 	onMount(() => {
-		const rotateTimer = setTimeout(() => {
-			rotation += Math.random() < 0.5 ? 1 : -1
-		}, 5000)
+		const rotateTimer = setInterval(() => {
+			rotation += Math.random() < 0.5 ? 1 : -1;
+		}, 5000);
 
 		return () => {
-			clearInterval(rotateTimer)
-		}
-	})
+			clearInterval(rotateTimer);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -39,36 +39,40 @@
 </div>
 
 <div class="how-to-play-menu">
-	<p1>เกมจะมีโจทย์เป้าหมาย (target) ซึ่งเป็น pattern ที่เราจะต้องกดตาม</p1>
-	<p1>โดยเกมจะมีสัญลักษ์สีเหลืองที่มุมซ้ายบน เพื่อเป็นจุดสังเกตให้กดตาม</p1>
-	<p1>ทุกครั้งที่ผ่านหลอดเวลาจะเพิ่มขึ้น เกมจะจบเมื่อเวลาหมด</p1>
-	
+	<GameGrid {grid} {rotation} />
+	<p>
+		เกมจะมีโจทย์เป้าหมาย (target) ซึ่งเป็น pattern ที่เราจะต้องกดตาม
+		โดยเกมจะมีสัญลักษ์สีเหลืองที่มุมซ้ายบนเพื่อเป็นจุดสังเกตให้ทำตามได้ง่ายขึ้น ทุกครั้งที่เล่นผ่าน
+		1 ด่านหลอดเวลาจะเพิ่มขึ้นเล็กน้อย เกมจะจบลงเมื่อเวลาหมด
+	</p>
 </div>
-<GameGrid {grid} {rotation}/>
 
 <style>
 	.how-to-play-menu {
-		border-radius: 25px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border-radius: 3.5vmin;
 		background: var(--base-black);
-		padding: 20px;
-		width: 80%;
+		padding: 7vmin;
+		width: 75%;
 		height: 100%;
 	}
 
-	p1 {
-		margin-bottom: 2px;
-		font-size: 40px;
-		color: white;
+	p {
+		font-size: 5.5vmin;
 		font-family: myFirstFont;
 		text-align: center;
+		color: white;
 		display: flex;
 		flex-direction: column;
+		margin-block-end: 0;
 	}
 	.widget-header h1 {
 		width: 100%;
 		display: flex;
 		font-family: myFirstFont;
-		font-size: 150px;
+		font-size: 22vmin;
 		margin-top: 0%;
 		margin-bottom: 0%;
 		color: var(--base-orange);
@@ -76,5 +80,4 @@
 		line-height: 1;
 		text-shadow: 0px 0px 10px var(--base-black);
 	}
-	
 </style>
