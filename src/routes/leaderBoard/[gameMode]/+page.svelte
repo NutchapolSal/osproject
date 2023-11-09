@@ -1,5 +1,6 @@
 <script lang="ts">
 	import CandyIcon from '$lib/images/candyIcon.png';
+	import PodiumBar from './PodiumBar.svelte';
 
 	export let data;
 
@@ -27,75 +28,26 @@
 </div>
 
 <div class="podium">
-	<div class="podium-player second-place">
-		<div class="podium-bar">
-			{#if players.length >= 2}
-				<div class="truncate">
-					<a href="../user/{sortedPlayers[1].userId}">
-						{sortedPlayers[1].displayName}
-					</a><br />🥈
-				</div>
-			{/if}
-		</div>
-		{#if players.length >= 2}
-			<div class="podium-score">
-				{sortedPlayers[1].score} points
-			</div>
-		{/if}
-	</div>
-	<div class="podium-player first-place">
-		<div class="podium-bar">
-			{#if players.length >= 1}
-				<div class="truncate">
-					<a href="../user/{sortedPlayers[0].userId}">
-						{sortedPlayers[0].displayName}
-					</a><br />🥇
-				</div>
-			{/if}
-		</div>
-		{#if players.length >= 1}
-			<div class="podium-score">
-				{sortedPlayers[0].score} points
-			</div>
-		{/if}
-	</div>
-	<div class="podium-player third-place">
-		<div class="podium-bar">
-			{#if players.length >= 3}
-				<div class="truncate">
-					<a href="../user/{sortedPlayers[2].userId}">
-						{sortedPlayers[2].displayName}
-					</a><br />🥉
-				</div>
-			{/if}
-		</div>
-		{#if players.length >= 3}
-			<div class="podium-score">
-				{sortedPlayers[2].score} points
-			</div>
-		{/if}
-	</div>
+	<PodiumBar player={sortedPlayers[1]} position={2} />
+	<PodiumBar player={sortedPlayers[0]} position={1} />
+	<PodiumBar player={sortedPlayers[2]} position={3} />
 </div>
 
 <div class="boardcontainer">
-	<ul class="ranking">
-		{#each sortedPlayers.slice(3) as player}
-			<li>{getPlayerRank(player)}</li>
-		{/each}
-	</ul>
-	<ul class="player">
-		{#each sortedPlayers.slice(3) as player}
-			<li>
-				<div class="truncate"><a href="../user/{player.userId}">{player.displayName}</a></div>
-				: {player.score} points
-			</li>
-		{/each}
-	</ul>
+	{#each sortedPlayers.slice(3) as player, i}
+		<div class="ranking">
+			{i + 4}
+		</div>
+		<div class="player">
+			<a href="../user/{player.userId}">{player.displayName}</a>
+			<div class="points">: {player.score} points</div>
+		</div>
+	{/each}
 </div>
 
 <style>
 	div.header {
-		width: 70%;
+		width: 70vmin;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -131,130 +83,56 @@
 		justify-content: center;
 	}
 
-	.podium-player {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-end;
-		align-self: flex-end;
-		font-size: 5vmin;
-		font-weight: bold;
-		text-align: center;
-		padding: 1.5vmin;
-	}
-
-	.podium-bar {
-		display: flex;
-		width: 28vmin;
-		height: 100%;
-		border: 0.5vmin solid var(--base-black);
-		border-radius: 1.5vmin;
-	}
-
-	.podium-score {
-		color: white;
-		-webkit-text-stroke: 0.1px black;
-	}
-
-	.first-place {
-		height: 200%;
-	}
-
-	.first-place .podium-bar {
-		background: gold;
-	}
-
-	.second-place {
-		height: 150%;
-	}
-
-	.second-place .podium-bar {
-		background: silver;
-	}
-
-	.third-place {
-		height: 125%;
-	}
-
-	.third-place .podium-bar {
-		background: #cd7f32;
-	}
-
 	.boardcontainer {
-		width: 70%;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
+		width: 90vmin;
+		display: grid;
 		margin: 0;
 		text-align: center;
+		grid-template-columns: 0.3fr 1fr 0.78fr;
+		gap: 1.5vmin 2vmin;
 	}
 
-	.boardcontainer li {
+	.boardcontainer .ranking {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+	.boardcontainer .player {
+		display: grid;
+		grid-template-columns: subgrid;
+		grid-column: 2 / 4;
+	}
+
+	.boardcontainer .ranking,
+	.boardcontainer .player {
 		color: var(--base-black);
 		font-family: myFirstFont;
 		font-size: 6vmin;
 		font-weight: 1000;
 		text-shadow: 0px 0px 10px var(--base-orange);
-		text-wrap: nowrap;
-		margin-top: 0px;
-		margin-bottom: 1.5vmin;
 		background-color: var(--base-orange);
 		border: 1.5vmin solid var(--base-black);
 		border-radius: 3.75vmin;
 		box-shadow: 0px 0px 10px var(--base-black);
 	}
 
-	.boardcontainer ul {
-		margin: 0;
-		padding-inline-start: 0px;
-	}
-
-	ul.ranking li {
-		width: 8vmin;
-		height: 8vmin;
-	}
-
-	ul.player {
-		padding-inline-start: 7.5vmin;
-	}
-
-	ul.player li {
-		display: flex;
-		justify-content: flex-start;
-		width: 100%;
-		height: 8vmin;
-		margin-left: 0;
-		margin-right: 0;
-	}
-
-	ul.player li div {
-		width: 40vmin;
-		margin-left: 10px;
-	}
-
-	.truncate {
-		width: 38vmin;
-		color: white;
-		font-weight: 1000;
-		-webkit-text-stroke: 0.1px black;
+	a {
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
-	}
-
-	.truncate a {
 		text-decoration: none;
 		color: #fff;
 		font-weight: 600;
 		font-family: myFirstFont;
 		-webkit-text-stroke: 0.1px black;
+		padding-left: 3vmin;
 	}
 
-	.truncate a:hover {
+	a:hover {
 		color: var(--base-black);
+	}
+
+	.points {
+		justify-self: start;
 	}
 </style>
