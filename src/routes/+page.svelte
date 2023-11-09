@@ -70,6 +70,11 @@
 		font-size: 3.5vmin;
 	}
 
+	.menu-user img {
+		width: 6.5vmin;
+		height: 6.5vmin;
+	}
+
 	.menu-group {
 		display: flex;
 		flex-direction: row;
