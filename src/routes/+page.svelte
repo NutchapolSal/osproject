@@ -131,12 +131,14 @@
 		color: #fff;
 		transform: translate(-2px, -2px);
 		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
-		transition: all 0.1s;
-		padding-left: 3.4vmin;
-		padding-right: 3.4vmin;
-		padding-top: 1.2vmin;
-		padding-bottom: 1.2vmin;
+		transition-duration: background-color 0.1s, border-color 0.1s;
+		padding: 1.2vmin 3.4vmin;
 		border-radius: 10vmin;
+	}
+	.menu-mode:hover {
+		background-color: var(--base-orange);
+		border-color: var(--base-orange);
+		cursor: pointer;
 	}
 
 	.seed-box {
@@ -156,7 +158,9 @@
 		font-family: Krasip, sans-serif;
 		font-size: 5vmin;
 		outline: none;
-		transition: all 0.5s ease-in-out, padding-left 500ms cubic-bezier(0.5, 0, 0.75, 0);
+		transition-property: width, padding-left;
+		transition-duration: 500ms;
+		transition-timing-function: ease-in-out, cubic-bezier(0.5, 0, 0.75, 0);
 		background-color: transparent;
 		padding-right: 0px;
 		color: #fff;
@@ -173,7 +177,9 @@
 	.input-seed:not(:placeholder-shown) {
 		width: 42vmin;
 		padding-left: 4vmin;
-		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+		transition-property: width, padding-left;
+		transition-duration: 500ms;
+		transition-timing-function: cubic-bezier(0, 0.11, 0.35, 2);
 	}
 	.btn-seed {
 		width: 10vmin;
@@ -194,7 +200,7 @@
 	.seed-box:has(.input-seed:focus),
 	.seed-box:has(.input-seed:hover) {
 		background-color: var(--base-orange);
-		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+		transition: background-color 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
 
 	.extra-settings-toggle {
@@ -202,9 +208,12 @@
 		padding: 1vmin;
 		background: var(--base-black);
 		border-radius: 10vmin;
-		transition: all 0.5s;
+		transition: background-color 0.5s, color 0.5s, border-color 0.5s;
 		cursor: pointer;
 		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+	}
+	.extra-settings-toggle:disabled {
+		cursor: default;
 	}
 	.extra-settings {
 		display: flex;
@@ -220,17 +229,7 @@
 	}
 	.extra-settings.hidden {
 		max-height: 0px;
-		margin-bottom: -0.75vmin;
-		margin-top: -0.75vmin;
-	}
-	.extra-settings-toggle:disabled {
-		cursor: default;
-	}
-
-	.menu-mode:hover {
-		background-color: var(--base-orange);
-		border-color: var(--base-orange);
-		cursor: pointer;
+		margin: -0.75vmin 0;
 	}
 
 	button[aria-current='true'] {
@@ -251,10 +250,7 @@
 		font-size: 7.2vmin;
 		font-weight: 600;
 		font-family: Krasip, sans-serif;
-		padding-left: 3.4vmin;
-		padding-right: 3.4vmin;
-		padding-top: 1.2vmin;
-		padding-bottom: 1.2vmin;
+		padding: 1.2vmin 3.4vmin;
 		border-radius: 10vmin;
 	}
 
