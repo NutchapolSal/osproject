@@ -1,10 +1,20 @@
 <script lang="ts">
 	import CandyIcon from '$lib/images/candyIcon.png';
 	import Github from '$lib/images/github-mark-white.svg';
-	import GameGrid from '../game/GameGrid.svelte';
+	import GameSquare from '../game/GameSquare.svelte';
 
 	export let data;
-	const grid = [[false]];
+	let squareState = true;
+	let switchCount = -1;
+	let rotation = 20;
+	$: {
+		squareState;
+		switchCount++;
+		if (10 <= switchCount) {
+			switchCount = 0;
+			rotation += 360;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -23,7 +33,11 @@
 
 <div class="about-me-widget">
 	<div class="about-me-widget-header">
-		<GameGrid {grid} rotation={0.2 / 0.9} />
+		<div class="spinny" style:rotate={`${rotation}deg`}>
+			<div class="wiggly">
+				<GameSquare bind:state={squareState} corner={true} />
+			</div>
+		</div>
 		<div style="display: flex; flex-direction: column;">
 			<h1>Candy Rotator</h1>
 			<a
@@ -103,6 +117,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
+		align-items: center;
 		padding-left: 2vmin;
 		padding-top: 2vmin;
 		gap: 6.5vmin;
@@ -116,5 +131,24 @@
 	}
 	.about-me-widget-header a:hover {
 		color: var(--base-orange);
+	}
+
+	@keyframes wiggle {
+		0% {
+			rotate: 10deg;
+		}
+		50% {
+			rotate: -10deg;
+		}
+		100% {
+			rotate: 10deg;
+		}
+	}
+
+	div.spinny {
+		transition: rotate var(--spinDuration, 1s) cubic-bezier(0.33, 1, 0.68, 1);
+	}
+	div.wiggly {
+		animation: 6s wiggle infinite both cubic-bezier(0.445, 0.05, 0.55, 0.95);
 	}
 </style>
