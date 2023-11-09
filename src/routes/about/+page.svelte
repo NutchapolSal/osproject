@@ -10,8 +10,7 @@
 	$: {
 		squareState;
 		switchCount++;
-		if (10 <= switchCount) {
-			switchCount = 0;
+		if (10 <= switchCount && switchCount % 10 == 0) {
 			rotation += 360;
 		}
 	}
@@ -28,7 +27,7 @@
 </svelte:head>
 
 <div class="header-widget">
-	<h1>About</h1>
+	<h1>About {switchCount}</h1>
 </div>
 
 <div class="about-me-widget">
@@ -39,7 +38,7 @@
 			</div>
 		</div>
 		<div style="display: flex; flex-direction: column;">
-			<h1>Candy Rotator</h1>
+			<h1>{switchCount < 100 ? 'Candy Rotator' : 'Stop It'}</h1>
 			<a
 				href="https://github.com/NutchapolSal/osproject"
 				target="_blank"
