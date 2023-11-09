@@ -117,8 +117,6 @@
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
-		padding-left: 2vmin;
-		padding-top: 2vmin;
 		gap: 6.5vmin;
 	}
 
