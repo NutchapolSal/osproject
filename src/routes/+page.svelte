@@ -11,7 +11,7 @@
 	<meta property="og:title" content="Candy Rotator" />
 	<meta property="og:description" content="a game about candies and rotation" />
 	<meta property="og:url" content={data.url.href} />
-	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta property="og:image" content={CandyIcon} />
 	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
 </svelte:head>
 
