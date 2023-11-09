@@ -2,6 +2,7 @@
 	import { GameModes, gameModeStore } from './gameModes';
 	import type { PageData } from './$types';
 	import CandyIcon from '$lib/images/candyIcon.png';
+	import AboutIcon from '$lib/images/info.svg';
 
 	export let data: PageData;
 	let showExtraSettings = false;
@@ -32,6 +33,9 @@
 </svelte:head>
 
 <div class="menu-user">
+	<a class="about-icon" href="./about">
+		<img src={AboutIcon} alt="about" width="50px" height="50px" />
+	</a>
 	{#if data.loginInfo}
 		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
 	{:else}
@@ -105,7 +109,7 @@
 	.menu-user {
 		display: flex;
 		flex-direction: row;
-		justify-content: flex-start;
+		justify-content: space-between;
 		align-items: center;
 		width: 100%;
 		gap: 10px;
@@ -113,7 +117,11 @@
 
 	.menu-user a {
 		font-size: 3.5vmin;
-		margin-left: auto;
+	}
+
+	.menu-user img {
+		width: 6.5vmin;
+		height: 6.5vmin;
 	}
 
 	.menu-group {
@@ -242,6 +250,34 @@
 	button[aria-current='true']:hover {
 		background-color: var(--base-black);
 		cursor: default;
+	}
+
+	.menu-mode:hover {
+		background-color: var(--base-orange);
+	}
+
+	button[aria-current='true'] {
+		transform: none;
+		filter: none;
+		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
+		border: var(--base-orange) 2px solid;
+	}
+	button[aria-current='true']:hover {
+		background-color: var(--base-black);
+	}
+
+	.about-icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 7vmin;
+		height: 7vmin;
+		padding: 0;
+		transition: all 0.3s;
+	}
+	.about-icon img {
+		width: 75%;
+		height: 75%;
 	}
 
 	a {
