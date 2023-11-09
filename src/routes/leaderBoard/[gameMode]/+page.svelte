@@ -39,7 +39,7 @@
 			{i + 4}
 		</div>
 		<div class="player">
-			<a href="../user/{player.userId}">{player.displayName}</a>
+			<a href="/user/{player.userId}">{player.displayName}</a>
 			<div class="points">: {player.score} points</div>
 		</div>
 	{/each}
@@ -52,7 +52,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		color: var(--base-black);
 		text-align: center;
 		text-shadow: 0px 0px 10px var(--base-black);
@@ -73,7 +73,7 @@
 	}
 
 	.podium {
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		display: flex;
 		height: 15vmin;
 		padding-top: 15vmin;
@@ -106,7 +106,7 @@
 	.boardcontainer .ranking,
 	.boardcontainer .player {
 		color: var(--base-black);
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 6vmin;
 		font-weight: 1000;
 		text-shadow: 0px 0px 10px var(--base-orange);
@@ -123,7 +123,7 @@
 		text-decoration: none;
 		color: #fff;
 		font-weight: 600;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		-webkit-text-stroke: 0.1px black;
 		padding-left: 3vmin;
 	}

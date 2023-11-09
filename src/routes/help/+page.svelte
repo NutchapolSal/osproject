@@ -61,7 +61,7 @@
 
 	p {
 		font-size: 5.5vmin;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		text-align: center;
 		color: white;
 		display: flex;
@@ -71,7 +71,7 @@
 	.widget-header h1 {
 		width: 100%;
 		display: flex;
-		font-family: myFirstFont;
+		font-family: Krasip, sans-serif;
 		font-size: 22vmin;
 		margin-top: 0%;
 		margin-bottom: 0%;

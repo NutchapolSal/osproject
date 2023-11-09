@@ -6,7 +6,7 @@
 
 <style>
 	@font-face {
-		font-family: myFirstFont;
+		font-family: Krasip;
 		src: url('$lib/fonts/MN KRASIP.ttf');
 	}
 
