@@ -136,7 +136,8 @@
 		border-radius: 10vmin;
 	}
 
-	button:hover:not(:disabled) {
+	.menu-mode:hover,
+	.extra-settings-toggle:hover:not(:disabled) {
 		background-color: var(--base-orange);
 		border-color: var(--base-orange);
 		cursor: pointer;
