@@ -135,10 +135,21 @@
 		padding: 1.2vmin 3.4vmin;
 		border-radius: 10vmin;
 	}
-	.menu-mode:hover {
+
+	button:hover:not(:disabled) {
 		background-color: var(--base-orange);
 		border-color: var(--base-orange);
 		cursor: pointer;
+	}
+	button[aria-current='true'] {
+		transform: none;
+		filter: none;
+		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
+		border: var(--base-orange) 2px solid;
+	}
+	button[aria-current='true']:hover {
+		background-color: var(--base-black);
+		cursor: default;
 	}
 
 	.seed-box {
@@ -208,7 +219,7 @@
 		padding: 1vmin;
 		background: var(--base-black);
 		border-radius: 10vmin;
-		transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+		transition: color 0.2s;
 		cursor: pointer;
 		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
 	}
@@ -231,17 +242,6 @@
 		visibility: hidden;
 		max-height: 0px;
 		margin: -0.75vmin 0;
-	}
-
-	button[aria-current='true'] {
-		transform: none;
-		filter: none;
-		box-shadow: inset var(--base-orange) 0px 0px 10px 2px;
-		border: var(--base-orange) 2px solid;
-	}
-	button[aria-current='true']:hover {
-		background-color: var(--base-black);
-		cursor: default;
 	}
 
 	a {
