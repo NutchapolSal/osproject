@@ -91,6 +91,7 @@
 
 	.menu-mode:hover {
 		background-color: var(--base-orange);
+		border-color: var(--base-orange);
 		cursor: pointer;
 	}
 
