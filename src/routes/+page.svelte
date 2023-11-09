@@ -50,9 +50,9 @@
 		}}
 		disabled={userSeed != ''}
 		class="extra-settings-toggle"
-		>{#if !showExtraSettings}🔻
+		>{#if !showExtraSettings}◀&#xFE0F
 		{:else}
-			{#if !extraSettingsUsed}🔺 {:else} ⚠&#xFE0F {/if}
+			{#if !extraSettingsUsed}🔽&#xFE0F {:else} ⚠&#xFE0F {/if}
 		{/if}
 	</button>
 </div>
@@ -189,6 +189,7 @@
 
 	.extra-settings-toggle {
 		font-size: 5vmin;
+		padding: 1vmin;
 		background: var(--base-black);
 		border-radius: 10vmin;
 		transition: all 0.5s;
@@ -200,13 +201,20 @@
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: center;
-		max-height: 20vmin;
+		max-height: 10vmin;
 		overflow: hidden;
-		transition: max-height 500ms;
+		transition-property: max-height, margin-bottom, margin-top;
+		transition-duration: 300ms;
+		transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		gap: 1vmin;
 	}
 	.extra-settings.hidden {
 		max-height: 0px;
+		margin-bottom: -0.75vmin;
+		margin-top: -0.75vmin;
+	}
+	.extra-settings-toggle:disabled {
+		cursor: default;
 	}
 
 	a {
