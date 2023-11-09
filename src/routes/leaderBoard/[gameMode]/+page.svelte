@@ -39,7 +39,7 @@
 			{i + 4}
 		</div>
 		<div class="player">
-			<a href="../user/{player.userId}">{player.displayName}</a>
+			<a href="/user/{player.userId}">{player.displayName}</a>
 			<div class="points">: {player.score} points</div>
 		</div>
 	{/each}

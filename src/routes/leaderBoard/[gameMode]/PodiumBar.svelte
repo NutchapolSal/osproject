@@ -19,18 +19,20 @@
 >
 	<div class="podium-bar">
 		{#if player != null}
-			<a href="../user/{player.userId}">
+			<a href="/user/{player.userId}">
 				{player.displayName}
 			</a>
 
 			{emojis[position - 1]}
 		{/if}
 	</div>
-	{#if player != null}
-		<div class="podium-score">
+	<div class="podium-score">
+		{#if player != null}
 			{player.score} points
-		</div>
-	{/if}
+		{:else}
+			<br />
+		{/if}
+	</div>
 </div>
 
 <style>
