@@ -5,10 +5,11 @@
 	import { GameModes, gameModeStore } from '../gameModes';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import CandyIcon from '$lib/images/candyIcon.png';
 
 	export let data;
+	export let form;
 	const gameSeed = data.gameSeed;
 
 	const size = 3;
@@ -151,6 +152,7 @@
 	let blanked = true;
 	let blankTimer = setTimeout(() => {}, 0);
 	let emptyTargetCheck = setTimeout(() => {}, 0);
+	let signedUp = data.loginInfo != null;
 
 	function startNewGrid() {
 		for (let y = 0; y < size; y++) {
@@ -338,38 +340,52 @@
 				<p>game over</p>
 				<p>
 					score : {score}
-					{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
-						<form
-							method="POST"
-							use:enhance={() => {
-								scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
-								return async ({ update }) => {
-									await update();
-									scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
-								};
-							}}
-						>
-							<input type="hidden" name="score" value={score} />
-							<input type="hidden" name="gameSeed" value={gameSeed} />
-							<input type="hidden" name="gameMode" value={$gameModeStore} />
-							<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
-							<input type="hidden" name="gameDuration" value={deathTime - startTime} />
-							<input type="hidden" name="gameVersion" value={'asd'} />
-							<button>submit score</button>
-						</form>
-					{/if}
-					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
-						<p>💫</p>
-					{/if}
+					{#if signedUp}
+						{#if gameOver && scoreSubmissionState == ScoreSubmissionState.NOT_SUBMITTED}
+							<form
+								method="POST"
+								use:enhance={() => {
+									scoreSubmissionState = ScoreSubmissionState.SUBMITTING;
+									return async ({ result }) => {
+										if (result.type == 'failure') {
+											await applyAction(result);
+											scoreSubmissionState = ScoreSubmissionState.FAILED;
+										} else {
+											scoreSubmissionState = ScoreSubmissionState.SUBMITTED;
+										}
+									};
+								}}
+							>
+								<input type="hidden" name="score" value={score} />
+								<input type="hidden" name="gameSeed" value={gameSeed} />
+								<input type="hidden" name="gameMode" value={$gameModeStore} />
+								<input type="hidden" name="timeStart" value={dateTimeStart?.toISOString()} />
+								<input type="hidden" name="gameDuration" value={deathTime - startTime} />
+								<input type="hidden" name="gameVersion" value={'asd'} />
+								<button>submit score</button>
+							</form>
+						{/if}
+						{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTING}
+							<p>💫</p>
+						{/if}
 
-					{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
-						<p>💢</p>
-					{/if}
+						{#if scoreSubmissionState == ScoreSubmissionState.FAILED}
+							<p>💢 {form?.error}</p>
+						{/if}
 
-					{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
-						<p>✅</p>
+						{#if scoreSubmissionState == ScoreSubmissionState.SUBMITTED}
+							<p>✅</p>
+						{/if}
 					{/if}
 				</p>
+				{#if !signedUp}
+					<p>
+						<a href="./login/google" on:click={() => (signedUp = true)} target="_blank"
+							>Sign Up with Google ↗</a
+						>to submit scores
+					</p>
+					<p class="smalltext">(come back to this tab after signing up)</p>
+				{/if}
 				<div class="gameover-menu">
 					<a href="#" on:click={() => location.reload()}>🎃 restart 🦇</a>
 					<a href="./">🎃 back 🦇</a>
@@ -466,13 +482,19 @@
 	.content-center p {
 		display: flex;
 		color: #090505;
-		font-size: 50px;
+		font-size: 6vmin;
 		font-weight: 600;
 		font-family: myFirstFont;
 		border-radius: 980px;
 		margin-top: 0%;
 		margin-bottom: 0%;
 		gap: 16px;
+	}
+
+	.content-center p.smalltext {
+		font-size: 4vmin;
+		margin-top: 0px;
+		margin-bottom: 0px;
 	}
 
 	.gameover-menu {
@@ -483,7 +505,7 @@
 		gap: 1.5vmin;
 	}
 
-	.gameover-menu a,
+	a,
 	.content-center button {
 		text-decoration: none;
 		color: #fff;
