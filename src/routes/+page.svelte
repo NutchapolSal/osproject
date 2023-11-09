@@ -118,13 +118,11 @@
 		width: 7vmin;
 		height: 7vmin;
 		padding: 0;
-		background-color: transparent;
 		transition: all 0.3s;
 	}
-	.about-icon:hover {
-		filter: invert(100%);
-		background-color: transparent;
-		transform: scale(1.2);
+	.about-icon img {
+		width: 75%;
+		height: 75%;
 	}
 
 	a {
