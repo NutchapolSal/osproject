@@ -142,8 +142,10 @@
 		font-weight: 100;
 	}
 	.btn-seed:focus ~ .input-seed,
-	input[type='text']:focus,
-	input[type='text']:not(:placeholder-shown) {
+	.input-seed:focus,
+	.btn-seed:hover ~ .input-seed,
+	.input-seed:hover,
+	.input-seed:not(:placeholder-shown) {
 		width: 42vmin;
 		padding-left: 4vmin;
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
@@ -163,7 +165,9 @@
 		pointer-events: painted;
 	}
 	.seed-box:has(.btn-seed:focus),
-	.seed-box:has(.input-seed:focus) {
+	.seed-box:has(.btn-seed:hover),
+	.seed-box:has(.input-seed:focus),
+	.seed-box:has(.input-seed:hover) {
 		background-color: var(--base-orange);
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
