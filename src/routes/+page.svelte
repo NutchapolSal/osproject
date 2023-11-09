@@ -53,8 +53,8 @@
 		>{#if !showExtraSettings}🔻
 		{:else}
 			{#if !extraSettingsUsed}🔺 {:else} ⚠&#xFE0F {/if}
-		{/if}</button
-	>
+		{/if}
+	</button>
 </div>
 <div class="extra-settings" class:hidden={!showExtraSettings}>
 	<div class="seed-box">
@@ -110,7 +110,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		gap: 16px;
+		gap: 1vmin;
 	}
 
 	.menu-mode {
@@ -126,12 +126,9 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
-		border-radius: 6vmin;
+		border-radius: 10vmin;
 	}
 
-	* {
-		box-sizing: border-box;
-	}
 	.seed-box {
 		width: fit-content;
 		height: fit-content;
@@ -190,6 +187,14 @@
 		transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 	}
 
+	.extra-settings-toggle {
+		font-size: 5vmin;
+		background: var(--base-black);
+		border-radius: 10vmin;
+		transition: all 0.5s;
+		cursor: pointer;
+		filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.2));
+	}
 	.extra-settings {
 		display: flex;
 		flex-direction: column;
@@ -215,7 +220,7 @@
 		padding-right: 3.4vmin;
 		padding-top: 1.2vmin;
 		padding-bottom: 1.2vmin;
-		border-radius: 6vmin;
+		border-radius: 10vmin;
 	}
 
 	a:hover {
