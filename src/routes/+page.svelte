@@ -222,12 +222,13 @@
 		align-items: center;
 		max-height: 10vmin;
 		overflow: hidden;
-		transition-property: max-height, margin-bottom, margin-top;
+		transition-property: max-height, margin-bottom, margin-top, visibility;
 		transition-duration: 300ms;
 		transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		gap: 1vmin;
 	}
 	.extra-settings.hidden {
+		visibility: hidden;
 		max-height: 0px;
 		margin: -0.75vmin 0;
 	}
