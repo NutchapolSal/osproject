@@ -521,6 +521,13 @@
 		white-space: nowrap;
 	}
 
+	a:hover,
+	.content-center button:hover {
+		background-color: var(--base-orange);
+		border-color: var(--base-orange);
+		cursor: pointer;
+	}
+
 	.content-center button {
 		display: flex;
 		width: 25vmin;
