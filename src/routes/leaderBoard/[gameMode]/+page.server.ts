@@ -12,8 +12,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 		scores: await getLeaderboard(gameMode),
 		gameMode: gameMode,
 		url: {
-			href: url.href,
-			origin: url.origin
+			href: url.href
 		}
 	};
 };

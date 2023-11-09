@@ -4,8 +4,7 @@ import type { PageServerLoad } from './$types';
 import { checkNullOrFile } from '$lib/checkNullOrFile';
 export const load: PageServerLoad = async ({ url }) => ({
 	url: {
-		href: url.href,
-		origin: url.origin
+		href: url.href
 	},
 	gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
 });

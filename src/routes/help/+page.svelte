@@ -29,7 +29,7 @@
 	<meta property="og:title" content="Help" />
 	<meta property="og:description" content="how to play this game" />
 	<meta property="og:url" content={data.url.href} />
-	<meta property="og:image" content={data.url.origin + CandyIcon} />
+	<meta property="og:image" content={CandyIcon} />
 	<meta property="og:site_name" content="Candy Rotator" />
 	<meta data-react-helmet="true" name="theme-color" content="#E6862E" />
 </svelte:head>

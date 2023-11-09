@@ -13,8 +13,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	return {
 		loginInfo,
 		url: {
-			href: url.href,
-			origin: url.origin
+			href: url.href
 		}
 	};
 };

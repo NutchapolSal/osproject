@@ -30,8 +30,7 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
 						isSelf: session.user.userId === params.id
 				  },
 		url: {
-			href: url.href,
-			origin: url.origin
+			href: url.href
 		}
 	};
 };
