@@ -128,7 +128,7 @@ export async function getScores(options: ScoresQueryOptions = {}) {
 	return results;
 }
 
-export async function getLeaderboard(gameMode: GameModes) {
+export async function getLeaderboard(gameMode: GameModes, showShadowbanned: boolean = false) {
 	const results: {
 		score: number;
 		gameMode: string;
@@ -148,6 +148,7 @@ export async function getLeaderboard(gameMode: GameModes) {
 		ORDER BY s.score DESC
 		LIMIT 1
 	) s
+	${showShadowbanned ? sql`` : sql`WHERE u.shadowbanned = FALSE`}
 	ORDER BY s.score DESC
 	LIMIT 100
 	`.forEach((score) => {
