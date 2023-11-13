@@ -27,7 +27,8 @@ export const load: PageServerLoad = async ({ url, locals }) => {
 			href: url.href
 		},
 		gameMode,
-		gameSeed: crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
+		gameSeed:
+			url.searchParams.get('seed') ?? crypto.getRandomValues(new Uint32Array(1))[0].toString(36)
 	};
 };
 
