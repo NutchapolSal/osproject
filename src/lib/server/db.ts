@@ -149,7 +149,7 @@ export async function getLeaderboard(gameMode: GameModes, showShadowbanned: bool
 		LIMIT 1
 	) s
 	${showShadowbanned ? sql`` : sql`WHERE u.shadowbanned = FALSE`}
-	ORDER BY s.score DESC
+	ORDER BY s.score DESC, s.time_start
 	LIMIT 100
 	`.forEach((score) => {
 		results.push({
