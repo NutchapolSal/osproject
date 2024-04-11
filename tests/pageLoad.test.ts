@@ -22,16 +22,16 @@ test('game page memory mode with seed can open', async ({ page }) => {
     await expect(page.getByText('target')).toBeVisible();
 });
 
-test('leaderboard page can open', async ({ page }) => {
+test('leaderboard page normal mode can open', async ({ page }) => {
     await page.goto('/leaderBoard/Normal');
-    await expect(page.getByRole('heading', { name: '🎃 Leaderboard 🎃' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Normal' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'Leaderboard' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'Normal' })).toBeVisible();
 });
 
 test('leaderboard page memory mode can open', async ({ page }) => {
     await page.goto('leaderBoard/Memory');
-    await expect(page.getByRole('heading', { name: '🎃 Leaderboard 🎃' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Memory' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'Leaderboard' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'Memory' })).toBeVisible();
 });
 
 test('user page can open', async ({ page }) => {
@@ -41,12 +41,12 @@ test('user page can open', async ({ page }) => {
 
 test('how to play page can open', async ({ page }) => {
     await page.goto('/help');
-    await expect(page.getByRole('heading', { name: 'How to Play' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'How To Play' })).toBeVisible();
 });
 
 test('about page can open', async ({ page }) => {
     await page.goto('/about');
-    await expect(page.getByRole('heading', { name: 'About' })).toBeVisible();
+    await expect(page.getByRole('heading').filter({ hasText: 'About' })).toBeVisible();
 });
 
 
