@@ -37,16 +37,11 @@
 	<a class="about-icon" href="./about">
 		<img src={AboutIcon} alt="about" width="50px" height="50px" />
 	</a>
-	<div>
-		{#if data.loginInfo}
-			<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
-		{:else}
-			<a href="./login/google">Login with Google</a>
-			{#if dev}
-				<a href="./login/generate">Login Generate</a>
-			{/if}
-		{/if}
-	</div>
+	{#if data.loginInfo}
+		<a href="./user/{data.loginInfo.userId}">{data.loginInfo.displayName}</a>
+	{:else}
+		<a href="./login/google">Login with Google</a>
+	{/if}
 </div>
 <div class="widget-header">
 	<h1>Candy Rotator</h1>
