@@ -1,6 +1,10 @@
 import { expect, type Page } from '@playwright/test';
 
-export async function playGame(page: Page, gridsDone: number, waitForGameOver = true) {
+export async function playGame(
+	page: Page,
+	gridsDone: number,
+	{ waitForGameOver = true, collectData = false } = {}
+) {
 	await page.getByRole('link').filter({ hasText: 'Start' }).click();
 	await expect(page.locator('div.square.game.blanked')).toHaveCount(9);
 	await expect(page.locator('div.square.game.blanked')).toHaveCount(0);
@@ -10,17 +14,19 @@ export async function playGame(page: Page, gridsDone: number, waitForGameOver = 
 		const squareStates = await page
 			.locator('div.square.game')
 			.evaluateAll((squares) => squares.map((square) => square.classList.contains('stateOn')));
-		const playerGridRotate = await page
-			.locator('div.spinny:has(button.square.game)')
-			.evaluate((spinny) => spinny.style.rotate);
-		const targetGridRotate = await page
-			.locator('div.spinny:has(div.square.game)')
-			.evaluate((spinny) => spinny.style.rotate);
-		gridStates.push({
-			squareStates,
-			playerGridSpinny: playerGridRotate,
-			targetGridSpinny: targetGridRotate
-		});
+		if (collectData) {
+			const playerGridRotate = await page
+				.locator('div.spinny:has(button.square.game)')
+				.evaluate((spinny) => spinny.style.rotate);
+			const targetGridRotate = await page
+				.locator('div.spinny:has(div.square.game)')
+				.evaluate((spinny) => spinny.style.rotate);
+			gridStates.push({
+				squareStates,
+				playerGridRotate,
+				targetGridRotate
+			});
+		}
 		for (let i = 0; i < squareStates.length; i++) {
 			if (squareStates[i]) {
 				await page.locator('button.square.game').nth(i).click();

@@ -8,15 +8,15 @@ async function playWithSeed(page: Page, seed: string) {
 	await page.getByRole('button', { name: '◀️' }).click();
 	await page.getByRole('button', { name: '🌱' }).focus();
 	await page.getByPlaceholder('Enter seed...').fill(seed);
-	return await playGame(page, 20, false);
+	return await playGame(page, 20, { waitForGameOver: false, collectData: true });
 }
 
 test('no seed should generate different grids', async ({ page }) => {
 	test.setTimeout(180000);
 	await page.goto('/');
-	const grids1 = await playGame(page, 20, false);
+	const grids1 = await playGame(page, 20, { waitForGameOver: false, collectData: true });
 	await page.goto('/');
-	const grids2 = await playGame(page, 20, false);
+	const grids2 = await playGame(page, 20, { waitForGameOver: false, collectData: true });
 	expect(grids1).not.toEqual(grids2);
 });
 
