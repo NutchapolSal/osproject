@@ -41,7 +41,8 @@ async function submitScore(
 	gameDuration: number,
 	gameVersion: string | null
 ) {
-	await page.goto(`/test-submit-score?mode=${gameMode}`);
+	const res = await page.goto(`/test-submit-score?mode=${gameMode}`);
+	expect(res?.status()).not.toBe(404);
 
 	await page.getByLabel('score').fill(score.toString());
 	if (gameSeed != null) {
