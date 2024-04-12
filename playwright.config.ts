@@ -30,7 +30,7 @@ const config: PlaywrightTestConfig = {
 		},
 		{
 			name: 'test',
-			testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+			testMatch: /\.(test|spec)\.[jt]s$/,
 			dependencies: ['setup userdata'],
 			use: {
 				baseURL: 'http://localhost:5173'
@@ -38,7 +38,7 @@ const config: PlaywrightTestConfig = {
 		},
 		{
 			name: 'production test',
-			testMatch: /(.+\.)?prodtest\.[jt]s/,
+			testMatch: /prodtest\.[jt]s$/,
 			use: {
 				baseURL: 'http://localhost:4173'
 			}
