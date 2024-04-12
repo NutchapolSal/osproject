@@ -1,49 +1,38 @@
-import { expect, test, type BrowserContext, type Browser } from '@playwright/test';
+import { expect, test as base, type Page } from '@playwright/test';
 
-let user1Context: BrowserContext;
-let user2Context: BrowserContext;
-
-async function createUserContext(browser: Browser) {
-	const userContext = await browser.newContext();
-	const page1 = await userContext.newPage();
-	await page1.goto('/login/test-generate');
-	return userContext;
-}
-
-test.beforeAll(async ({ browser }) => {
-	const page = await browser.newPage();
-	await page.goto('/test-wipe-db');
-	await Promise.all([
-		createUserContext(browser).then((ctx) => {
-			user1Context = ctx;
-		}),
-		createUserContext(browser).then((ctx) => {
-			user2Context = ctx;
-		})
-	]);
+const test = base.extend<{ user1Page: Page; user2Page: Page }>({
+	user1Page: async ({ page }, use) => {
+		await page.goto('/login/test-generate?key=user1');
+		await use(page);
+	},
+	user2Page: async ({ page }, use) => {
+		await page.goto('/login/test-generate?key=user2');
+		await use(page);
+	}
 });
 
-test.afterAll(async () => {
-	await Promise.all([user1Context.close(), user2Context.close()]);
+test.describe.configure({ mode: 'parallel' });
+
+test('edit available', async ({ user1Page }) => {
+	const page = user1Page;
+	await page.goto('/');
+	await page.getByRole('link', { name: 'save' }).click();
+	await expect(page.getByRole('button', { name: 'edit' })).toBeVisible();
+	await expect(page.getByRole('button', { name: 'log out' })).toBeVisible();
 });
 
-test('change name', async () => {
-	const page = await user1Context.newPage();
+test('no editing on other user', async ({ user1Page }) => {
+	const page = user1Page;
 	await page.goto('/');
-	await page.getByRole('link', { name: 'user' }).click();
-	await page.getByRole('button', { name: 'edit' }).click();
-	await page.getByRole('textbox').fill('save');
-	await page.getByRole('button', { name: 'save' }).click();
-	await expect(page.getByRole('textbox')).toBeHidden();
-	await page.goto('/');
-	await expect(page.getByRole('link', { name: 'save' })).toBeVisible();
+	await page.getByRole('link').filter({ hasText: 'Leaderboard' }).click();
+	await page.getByRole('link', { name: 'aomda' }).click();
+	await expect(page.getByRole('button', { name: 'edit' })).toBeHidden();
+	await expect(page.getByRole('button', { name: 'log out' })).toBeHidden();
 });
-test('change name 2', async () => {
-	const page = await user2Context.newPage();
-	await page.goto('/');
-	await page.getByRole('link', { name: 'user' }).click();
-	await page.getByRole('button', { name: 'edit' }).click();
-	await page.getByRole('textbox').fill('aomda');
-	await page.getByRole('button', { name: 'save' }).click();
-	await expect(page.getByRole('textbox')).toBeHidden();
+
+test('404 on unknown user', async ({ page }) => {
+	const response = await page.goto('/user/apdxapdxapdx');
+	if (response) {
+		expect(response.status()).toBe(404);
+	}
 });
