@@ -6,7 +6,22 @@ const config: PlaywrightTestConfig = {
 		port: 5173
 	},
 	testDir: 'tests',
-	testMatch: /(.+\.)?(test|spec)\.[jt]s/
+	projects: [
+		{
+			name: 'setup db',
+			testMatch: /db\.setup\.ts/
+		},
+		{
+			name: 'setup userdata',
+			testMatch: /userdata\.setup\.ts/,
+			dependencies: ['setup db']
+		},
+		{
+			name: 'test',
+			testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+			dependencies: ['setup userdata']
+		}
+	]
 };
 
 export default config;
