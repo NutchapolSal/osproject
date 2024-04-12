@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test } from './svelteWaitFixture';
 import { playGame } from './autogame';
 
 test('try play game', async ({ page }) => {

@@ -1,15 +1,5 @@
-import { expect, test as base, type Page } from '@playwright/test';
-
-const test = base.extend<{ user1Page: Page; user2Page: Page }>({
-	user1Page: async ({ page }, use) => {
-		await page.goto('/login/test-generate?key=user1');
-		await use(page);
-	},
-	user2Page: async ({ page }, use) => {
-		await page.goto('/login/test-generate?key=user2');
-		await use(page);
-	}
-});
+import { test } from './userFixture';
+import { expect, type Page } from '@playwright/test';
 
 test.describe.configure({ mode: 'parallel' });
 

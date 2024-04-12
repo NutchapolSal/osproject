@@ -1,7 +1,9 @@
-import { expect, test } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './svelteWaitFixture';
 
 test('wipe database', async ({ page }) => {
-	await page.goto('/test-wipe-db');
+	//@ts-expect-error special goto option from svelte fixture
+	await page.goto('/test-wipe-db', { wait_for_started: false });
 	await page.goto('/leaderBoard/Normal');
 	await expect(
 		page.locator('.podium-player a').or(page.locator('div.boardcontainer div.ranking'))

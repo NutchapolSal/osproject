@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('test-wipe-db is not available', async ({ page }) => {
 	const res = await page.goto('/test-wipe-db');

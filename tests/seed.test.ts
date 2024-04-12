@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
+import { test } from './svelteWaitFixture';
+import { expect, type Page } from '@playwright/test';
 import { playGame } from './autogame';
 
 test.describe.configure({ mode: 'parallel' });
@@ -11,7 +12,7 @@ async function playWithSeed(page: Page, seed: string) {
 }
 
 test('no seed should generate different grids', async ({ page }) => {
-	test.setTimeout(120000);
+	test.setTimeout(180000);
 	await page.goto('/');
 	const grids1 = await playGame(page, 20, false);
 	await page.goto('/');
@@ -20,7 +21,7 @@ test('no seed should generate different grids', async ({ page }) => {
 });
 
 test('same seed should generate same grids', async ({ page }) => {
-	test.setTimeout(120000);
+	test.setTimeout(180000);
 	const seed = crypto.getRandomValues(new BigUint64Array(1))[0].toString(36);
 	await page.goto('/');
 	const grids1 = await playWithSeed(page, seed);
@@ -30,7 +31,7 @@ test('same seed should generate same grids', async ({ page }) => {
 });
 
 test('different seed should generate same grids', async ({ page }) => {
-	test.setTimeout(120000);
+	test.setTimeout(180000);
 	const seed1 = crypto.getRandomValues(new BigUint64Array(1))[0].toString(36);
 	const seed2 = crypto.getRandomValues(new BigUint64Array(1))[0].toString(36);
 	await page.goto('/');
