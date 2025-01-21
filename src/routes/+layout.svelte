@@ -1,3 +1,11 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		document.body.classList.add('started');
+	});
+</script>
+
 <div class="background" />
 
 <div class="container">

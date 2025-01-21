@@ -168,4 +168,8 @@ export async function updateDisplayName(userId: string, displayName: string) {
 	await sql`UPDATE auth_user SET display_name = ${displayName} WHERE id = ${userId}`;
 }
 
+export async function wipeDatabase() {
+	await sql`TRUNCATE auth_user, score, user_key, user_session RESTART IDENTITY`;
+}
+
 export default sql;

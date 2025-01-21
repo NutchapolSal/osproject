@@ -3,6 +3,7 @@
 	import type { PageData } from './$types';
 	import CandyIcon from '$lib/images/candyIcon.png';
 	import AboutIcon from '$lib/images/info.svg';
+	import { dev } from '$app/environment';
 
 	export let data: PageData;
 	let showExtraSettings = false;
